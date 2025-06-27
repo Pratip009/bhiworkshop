@@ -1,0 +1,46 @@
+/* src/components/Header.css */
+
+.navbar-custom {
+    background-color: #ffffff;
+    padding: 15px 10px; /* Padding for better spacing */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .navbar-brand {
+    
+    font-size: 1.2rem; /* Bigger logo font size */
+    font-weight: bold;
+    color: #ffffff !important; /* White logo color */
+     /* Uppercase letters */
+  }
+  
+  .navbar-links .nav-item {
+    font-family: 'Quicksand';
+    font-size: 15px; /* Slightly larger text for nav links */
+    font-weight: 800;
+    color: #007bff !important; /* White nav link color */
+    margin-left: 20px; /* Space between links */
+  }
+  
+  .navbar-links .nav-item:hover {
+    color: #007bff !important; /* Golden color for hover effect */
+   /* Underline on hover */
+   text-decoration: underline;
+  
+    transition: color 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+  }
+  
+  .navbar-toggler-icon {
+    width: 20px !important;
+    height: 20px !important;
+    background-color: #fff !important; /* White hamburger icon */
+  }
+  
+  .navbar-collapse {
+    justify-content: flex-end; /* Align items to the right */
+  }
+  
+  header {
+    z-index: 50 !important;
+  }
+  

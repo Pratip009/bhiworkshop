@@ -1,0 +1,28 @@
+/* src/components/TopHeader.css */
+.headertop{
+  background-color: #007bff;
+  padding: 15px 10px;
+}
+.navbar-text {
+  color: #ffffff !important; /* Text color for both phone and email */
+  font-size: 15px;
+  font-weight: 600; /* Consistent font size across all devices */
+  font-family: 'Nunito' !important;
+}
+
+.navbar-icon {
+  margin-right: 5px; /* Space between icon and text */
+  color: #ffffff; /* Icon color */
+  font-size: 15px; /* Consistent size of the icons */
+}
+
+/* Ensure responsiveness */
+@media (max-width: 576px) {
+  .navbar-text {
+    font-size: 0.8rem; /* Adjust font size on very small screens */
+  }
+  .navbar-icon {
+    font-size: 0.8rem;
+    margin-right: 0;
+  }
+}
