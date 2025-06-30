@@ -12,7 +12,7 @@ export default {
         },
       },
       fontFamily: {
-        dmserif: ["DM Serif Text", "serif"],
+        play: ['"Play"', 'sans-serif'],
       },
     },
   },

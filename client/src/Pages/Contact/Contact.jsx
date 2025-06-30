@@ -37,7 +37,6 @@ const Contact = () => {
       setErrors(newErrors);
     } else {
       setErrors({});
-
       emailjs
         .send(
           "service_tsdlp8n",
@@ -56,30 +55,32 @@ const Contact = () => {
   };
 
   return (
-    <div className="container mx-auto px-6 py-12">
+    <div className="container-fluid mx-auto px-6 py-12 bg-white text-black min-h-screen" style={{ fontFamily: "Play, sans-serif" }}>
       {/* Banner */}
-      <Banner
+      <div className="container">
+        <Banner
         text="Get in Touch"
         imageUrl="https://www.stitchtools.com/assets/images/contact/contact-banner.jpg"
       />
 
-      <div className="grid md:grid-cols-2 gap-12 items-center mt-5">
+      <div className="grid md:grid-cols-2 gap-12 items-start mt-5">
         {/* Contact Info */}
         <div className="space-y-6" data-aos="fade-right">
           <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-            <FaMapMarkerAlt className="text-[#4ADE80] text-2xl animate-bounce" />
-            <span className="text-gray-700">
-              591 Summit Ave, Suite No. 400 ,Jersey City, New Jersey, NJ 07306
+            <FaMapMarkerAlt className="text-green-400 text-2xl animate-bounce" />
+            <span className="text-gray-800">
+              591 Summit Ave, Suite No. 400, Jersey City, NJ 07306
             </span>
           </div>
           <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-            <FaEnvelope className="text-[#4ADE80] text-2xl animate-bounce" />
-            <span className="text-gray-700">admin@bhilearning.com</span>
+            <FaEnvelope className="text-green-400 text-2xl animate-bounce" />
+            <span className="text-gray-800">admin@bhilearning.com</span>
           </div>
           <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-            <FaPhone className="text-[#4ADE80] text-2xl animate-bounce" />
-            <span className="text-gray-700">201-377-1594</span>
+            <FaPhone className="text-green-400 text-2xl animate-bounce" />
+            <span className="text-gray-800">201-377-1594</span>
           </div>
+
           {/* Embedded Map */}
           <div
             className="rounded-2xl overflow-hidden shadow-lg"
@@ -101,61 +102,62 @@ const Contact = () => {
 
         {/* Contact Form */}
         <form
-          className="bg-white p-8 shadow-2xl rounded-2xl"
+          className="bg-gray-100 p-8 shadow-2xl rounded-2xl"
           data-aos="fade-left"
           onSubmit={handleSubmit}
         >
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">Name</label>
+            <label className="block text-gray-600 font-semibold">Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-primary focus:outline-none"
+              className="w-full mt-1 p-3 border border-gray-700 rounded-xl bg-gray-200 text-black focus:ring-green-400 focus:outline-none"
             />
             {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+              <p className="text-red-400 text-sm mt-1">{errors.name}</p>
             )}
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">Email</label>
+            <label className="block text-gray-600 font-semibold">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-primary focus:outline-none"
+              className="w-full mt-1 p-3 border border-gray-700 rounded-xl bg-gray-200 text-black focus:ring-green-400 focus:outline-none"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              <p className="text-red-400 text-sm mt-1">{errors.email}</p>
             )}
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold">Message</label>
+            <label className="block text-gray-600 font-semibold">Message</label>
             <textarea
               name="message"
               value={formData.message}
               onChange={handleChange}
-              className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:ring-primary focus:outline-none h-32"
+              className="w-full mt-1 p-3 border border-gray-700 rounded-xl bg-gray-200 text-black focus:ring-green-400 focus:outline-none h-32"
             ></textarea>
             {errors.message && (
-              <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+              <p className="text-red-400 text-sm mt-1">{errors.message}</p>
             )}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-[#4ADE80] text-black font-semibold py-3 rounded-xl hover:shadow-xl transition-transform hover:scale-105 duration-300"
+            className="w-full bg-green-400 text-black font-semibold py-3 rounded-xl hover:shadow-xl transition-transform hover:scale-105 duration-300"
           >
             Tell Us Your Thoughts
           </button>
           {success && (
-            <p className="text-green-500 text-center mt-4">{success}</p>
+            <p className="text-green-400 text-center mt-4">{success}</p>
           )}
         </form>
+      </div>
       </div>
     </div>
   );

@@ -6,23 +6,24 @@ import "aos/dist/aos.css";
 
 const PaymentOptions = () => {
   const location = useLocation();
-  const [loading, setLoading] = useState({ full: false, partial: false });
+  const [loading, setLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+  const course = location.state?.course;
+
   useEffect(() => {
     window.scrollTo(0, 0);
     AOS.init({ duration: 1000 });
   }, []);
 
-  const course = location.state?.course;
-
   if (!course) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
         <div
-          className="bg-white p-8 rounded-lg shadow-lg text-center"
+          className="bg-gray-800 p-8 rounded-lg shadow-xl text-center"
           data-aos="fade-up"
         >
-          <p className="text-xl font-semibold text-gray-700">
+          <p className="text-xl font-semibold text-gray-100">
             No course details found. Please go back and select a course.
           </p>
         </div>
@@ -30,103 +31,90 @@ const PaymentOptions = () => {
     );
   }
 
-  const handlePayment = async (amount, type) => {
-    setLoading((prev) => ({ ...prev, [type]: true }));
-
-    const token = localStorage.getItem("token"); // or sessionStorage
-    console.log("Retrieved token:", token);
+  const handlePayment = async () => {
+    setLoading(true);
+    const token = localStorage.getItem("token");
 
     try {
-      console.log("Initiating payment with amount:", amount);
-
       const res = await axios.post(
         `${API_URL}/payment`,
         {
-          amount,
-          return_url: "http://localhost:3000/success",
+          amount: course.price,
+          return_url: "http://localhost:5173/success", // Replace with your production domain
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // add token to request header
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      console.log("Payment response:", res.data);
+      // 🔍 Debug response from backend
+      console.log("📦 PayPal response from backend:", res.data);
+
+      // 🔍 Log what is being saved to sessionStorage
+      console.log("💾 Saving to sessionStorage:");
+      console.log("➡️ courseId:", course._id);
+      console.log("➡️ courseAmount:", course.price);
+      console.log("➡️ paymentId:", res.data.paymentId);
+
+      sessionStorage.setItem("courseId", course._id);
+      sessionStorage.setItem("courseAmount", course.price);
+      sessionStorage.setItem("paymentId", res.data.paymentId);
 
       if (res.data.approval_url) {
         window.location.href = res.data.approval_url;
       } else {
-        throw new Error("No PayPal approval URL found");
+        throw new Error("No PayPal approval URL returned");
       }
     } catch (error) {
-      console.error("Payment Error:", error);
-      if (error.response) {
-        console.error(
-          "Server responded with:",
-          error.response.status,
-          error.response.data
-        );
-      }
+      console.error(
+        "❌ Payment initiation failed:",
+        error.response?.data || error.message
+      );
       alert("Payment initiation failed. Please try again.");
     } finally {
-      setLoading((prev) => ({ ...prev, [type]: false }));
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-300">
+    <div
+      className="flex items-center justify-center min-h-screen bg-white text-black"
+      style={{ fontFamily: "Play, sans-serif" }}
+    >
       <div
-        className="relative bg-white/80 backdrop-blur-lg p-10 rounded-3xl shadow-2xl max-w-2xl text-center"
+        className="bg-gray-800 p-10 rounded-2xl shadow-2xl w-full max-w-2xl text-center"
         data-aos="zoom-in"
       >
         <h2
-          className="text-4xl font-bold text-gray-900 mb-6"
+          className="text-3xl sm:text-4xl font-bold text-white mb-4"
           data-aos="fade-down"
         >
-          Payment Options for{" "}
-          <span className="text-blue-500">{course.title} </span>course
+          Payment for <span className="text-blue-400">{course.title}</span>
         </h2>
 
-        <p className="text-lg font-medium text-gray-700" data-aos="fade-up">
-          Choose a payment option below:
+        <p className="text-lg text-gray-300" data-aos="fade-up">
+          Pay the full amount to enroll and unlock everything instantly.
         </p>
 
-        <div className="mt-6 flex flex-col gap-y-8">
-          {" "}
-          {/* Flexbox with gap */}
+        <div className="mt-8">
           <button
-            onClick={() => handlePayment(4000, "full")}
-            className="w-full py-4 bg-gradient-to-r from-green-400 to-green-600 text-white text-xl font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"
-            disabled={loading.full}
-            data-aos="fade-right"
+            onClick={handlePayment}
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-lg shadow-lg transition-transform transform hover:scale-105"
+            disabled={loading}
+            data-aos="fade-up"
           >
-            {loading.full ? "Processing..." : "Full Payment - $4000"}
-          </button>
-          <button
-            onClick={() => handlePayment(2000, "partial")}
-            className="w-full py-4 bg-gradient-to-r from-blue-400 to-blue-600 text-white text-xl font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"
-            disabled={loading.partial}
-            data-aos="fade-left"
-          >
-            {loading.partial ? "Processing..." : "Partial Payment - $2000"}
+            {loading
+              ? "Processing..."
+              : `Full Payment - $${course.price?.toFixed(2)}`}
           </button>
         </div>
 
-        {/* Additional Information */}
-        <div
-          className="mt-8 text-gray-700 space-y-2 text-sm"
-          data-aos="fade-up"
-        >
+        <div className="mt-6 text-gray-400 text-sm" data-aos="fade-up">
           <p className="flex items-center gap-2">
-            <span className="text-green-500 text-lg">✔</span>
-            <strong>Full Payment:</strong> Pay the full amount upfront and
-            unlock exclusive discounts.
-          </p>
-          <p className="flex items-center gap-2">
-            <span className="text-blue-500 text-lg">✔</span>
-            <strong>Partial Payment:</strong> Start with a deposit and pay in
-            installments.
+            <span className="text-green-400 text-lg">✔</span>
+            <strong>Full Payment:</strong> One-time payment, instant access.
           </p>
         </div>
       </div>

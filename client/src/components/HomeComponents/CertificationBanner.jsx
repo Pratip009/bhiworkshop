@@ -49,7 +49,6 @@ const CertificationBanner = () => {
         data-aos="zoom-in"
       >
         Get Your Quality Skills Certificate<span className="mr-2"></span>
-        
       </h1>
 
       <p

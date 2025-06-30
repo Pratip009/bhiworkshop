@@ -26,7 +26,7 @@ import AddGalleryImage from "./components/Admin/AddGalleryImage";
 import Profile from "./Pages/Profile/Profile";
 import TermsAndConditions from "./Pages/TermsAndConditions";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
-
+import Payment from "./components/Admin/Payment";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -43,7 +43,7 @@ const App = () => {
         <div className="content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/courses" element={<Courses />} />
+            <Route path="/workshops" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
@@ -55,15 +55,21 @@ const App = () => {
             <Route path="/success" element={<PaymentSuccess />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
             <Route
               path="/terms-and-conditions"
               element={<TermsAndConditions />}
             />
-            <Route
-              path="/privacy-policy"
-              element={<PrivacyPolicy />}
-            />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute roles={["user", "admin"]}>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/profile"
               element={
@@ -85,6 +91,14 @@ const App = () => {
               element={
                 <ProtectedRoute roles={["admin"]}>
                   <AddCourse />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payments"
+              element={
+                <ProtectedRoute roles={["admin"]}>
+                  <Payment />
                 </ProtectedRoute>
               }
             />

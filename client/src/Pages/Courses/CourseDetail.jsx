@@ -1,60 +1,92 @@
+// CourseDetail.jsx
+/* eslint-disable react/prop-types */
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-import Banner from "../../components/Banner";
+import { useState, useEffect, useContext } from "react";
 import SpinnerLoader from "../../components/Loader";
-
-import AOS from "aos";
-import "aos/dist/aos.css";
+import AuthContext from "../../context/AuthContext";
 import {
   FaClock,
-  FaCertificate,
-  FaGraduationCap,
-  FaListAlt,
+  FaHourglassHalf,
+  FaCalendarAlt,
+  FaCalendarCheck,
+  FaAward,
+  FaBox,
+  FaCheckCircle,
 } from "react-icons/fa";
 
-const CourseDetail = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
+const splitLearningOutcomes = (arr) => {
+  const mid = Math.ceil(arr.length / 2);
+  return [arr.slice(0, mid), arr.slice(mid)];
+};
 
+const CourseDetail = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   const [course, setCourse] = useState(null);
-  const [activeTab, setActiveTab] = useState("description");
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [userCourses, setUserCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   useEffect(() => {
-    AOS.init();
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const courseRes = await fetch(`${API_URL}/courses`);
+        const courses = await courseRes.json();
+        const found = courses.find((c) => c._id === id);
+        if (!found) {
+          navigate("/404");
+          return;
+        }
+        setCourse(found);
 
-    // Check auth status from localStorage
-    const token = localStorage.getItem("token");
-    setIsSignedIn(!!token);
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+        if (user && token && userId) {
+          const userRes = await fetch(`${API_URL}/users/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const userData = await userRes.json();
+          if (userData.purchasedCourses) {
+            setUserCourses(
+              userData.purchasedCourses.map((c) => c.course._id || c.course)
+            );
+          }
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load course details.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    // Fetch courses
-    fetch(`${API_URL}/courses`)
-      .then((response) => response.json())
-      .then((data) => {
-        const selectedCourse = data.find((course) => course._id === id);
-        setCourse(selectedCourse);
-      })
-      .catch((error) => {
-        console.error("Error fetching course data:", error);
-        setCourse(null);
-      });
-  }, [id]);
+    fetchData();
+  }, [id, navigate, user, API_URL]);
 
   const handleEnroll = () => {
-    if (isSignedIn) {
-      navigate(`/payment/${id}`, { state: { course } });
+    if (user) {
+      navigate(`/payment-options`, { state: { course } });
     } else {
       navigate("/login");
     }
   };
 
-  if (course === null) {
+  if (loading) {
     return (
-      <div className="flex items-center justify-center text-center py-12">
-        <SpinnerLoader size={48} />
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <SpinnerLoader size={70} />
+      </div>
+    );
+  }
+
+  if (error || !course) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-white text-red-500 text-xl font-semibold">
+        <p>{error || "Course not found."}</p>
       </div>
     );
   }
@@ -65,155 +97,158 @@ const CourseDetail = () => {
     price,
     duration,
     totalHours,
-    credential,
-    preRequisite,
+    calendarLength,
+    classDays,
     description,
-    content,
     certification,
+    learningOutcomes = [],
+    kitsIncluded,
+    startDate,
+    endDate,
+    availableSeats,
   } = course;
 
-  const courseContents = content || [];
+  const isEnrolled = user && userCourses.includes(course._id);
+  const allOutcomes = [
+    ...splitLearningOutcomes(learningOutcomes)[0],
+    ...splitLearningOutcomes(learningOutcomes)[1],
+  ];
 
   return (
-    <div className="container mx-auto mt-16 font-nunito">
-      <Banner
-        text={title}
-        imageUrl="https://static.vecteezy.com/system/resources/thumbnails/046/946/744/small_2x/school-students-in-modern-computer-based-classroom-in-school-education-of-programming-languages-video.jpg"
-      />
-
-      <div className="flex flex-col lg:flex-row mt-8 px-4 md:px-12">
-        {/* Left: Details */}
-        <div className="lg:w-2/3 w-full lg:pr-12 mb-6 lg:mb-0">
-          <img
-            src={imgUrl}
-            alt={title}
-            className="w-full h-auto rounded-2xl shadow-2xl border-4 border-gray-200 hover:border-green-400 transition-all duration-300"
-            data-aos="fade-up"
-          />
-
-          {/* Tabs */}
-          <div className="flex justify-center space-x-6 border-b border-gray-300 mb-6 mt-4">
-            {["description", "contents", "duration"].map((tab) => (
-              <button
-                key={tab}
-                className={`py-2 px-4 text-lg font-semibold ${
-                  activeTab === tab
-                    ? "border-b-4 border-green-400 text-green-400"
-                    : "text-gray-600 hover:text-green-400"
-                }`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
+    <div
+      className="min-h-screen bg-white text-black"
+      style={{ fontFamily: "Play, sans-serif" }}
+    >
+      <main className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+          {/* LEFT PANEL */}
+          <div>
+            <img
+              src={imgUrl}
+              alt={title}
+              className="w-full h-[340px] rounded-xl object-cover border border-gray-200 shadow-sm"
+            />
+            <div className="grid grid-cols-2 gap-4 mt-6 text-sm text-gray-700">
+              <DetailItem icon={<FaClock />} label={duration} />
+              <DetailItem
+                icon={<FaHourglassHalf />}
+                label={`${totalHours} Hours`}
+              />
+              <DetailItem icon={<FaCalendarAlt />} label={calendarLength} />
+              <DetailItem icon={<FaCalendarCheck />} label={classDays} />
+              <DetailItem icon={<FaAward />} label={certification} />
+              {kitsIncluded && (
+                <DetailItem icon={<FaBox />} label="Kits Included" />
+              )}
+            </div>
           </div>
 
-          {/* Tab Content */}
+          {/* RIGHT PANEL */}
           <div>
-            {activeTab === "description" && (
-              <p className="text-base text-black sm:text-xl">{description}</p>
-            )}
-            {activeTab === "contents" && (
-              <ul className="list-disc pl-6 space-y-2 text-base text-black sm:text-xl">
-                {courseContents.length > 0 ? (
-                  courseContents.map((content, index) => (
-                    <li key={index} className="text-lg">
-                      {content}
-                    </li>
-                  ))
-                ) : (
-                  <li className="text-lg">No course contents available</li>
-                )}
-              </ul>
-            )}
-            {activeTab === "duration" && (
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
+              {title}
+            </h1>
+            <p className="text-base sm:text-lg text-gray-600 mb-6">
+              {description}
+            </p>
+
+            {/* Price & Enroll Button */}
+            <div className="flex items-center flex-wrap gap-6 mb-8">
               <div>
-                <p className="text-base text-black sm:text-xl">
-                  <strong>Pre-requisite:</strong>{" "}
-                  {preRequisite || "Not specified"}
-                </p>
-                <p className="text-base text-black sm:text-xl">
-                  <strong>Total Clock Hours:</strong>{" "}
-                  {totalHours || "Not specified"} Hours
-                </p>
-                <p className="text-base text-black sm:text-xl">
-                  <strong>Certification:</strong>{" "}
-                  {certification || "Not specified"}
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl font-bold text-gray-900">
+                    ${price}
+                  </span>
+                  <span className="line-through text-gray-500 text-lg">
+                    ${(price * 1.2).toFixed(0)}
+                  </span>
+                </div>
+                <p className="text-xs text-green-600 font-semibold mt-1">
+                  20% off this week!
                 </p>
               </div>
-            )}
+
+              {!isEnrolled ? (
+                <button
+                  onClick={handleEnroll}
+                  className="bg-[#57B4BA] hover:bg-[#45a3a0] text-white px-6 py-3 rounded-lg font-semibold transition"
+                >
+                  {user ? "Enroll Now" : "Sign in to Enroll"}
+                </button>
+              ) : (
+                <span className="bg-green-600 text-white font-semibold py-2 px-5 rounded-md shadow">
+                  Enrolled! We&apos;ll contact you soon.
+                </span>
+              )}
+            </div>
+
+            {/* Date & Seat Info */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center bg-indigo-50 border border-indigo-300 rounded-lg p-4 mb-10">
+              <InfoBox label="Start Date" value={startDate || "N/A"} />
+              <InfoBox label="End Date" value={endDate || "N/A"} />
+              <InfoBox label="Seats Available" value={availableSeats ?? "0"} />
+            </div>
           </div>
         </div>
 
-        {/* Right: Sidebar */}
-        <div
-          className="lg:w-1/3 w-full bg-white p-6 rounded-lg shadow-lg lg:mt-0 mt-6"
-          style={{ maxHeight: "fit-content" }}
-          data-aos="fade-left"
-        >
-          <h2
-            className="text-4xl font-bold text-black sm:text-6xl lg:text-7xl"
-            data-aos="fade-up"
-          >
-            {title}
+        {/* What You’ll Learn Section */}
+        <div className="mt-14">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            What you&apos;ll learn
           </h2>
-          <p className="text-2xl text-gray-700 mb-4">
-            <span className="text-green-400 text-3xl font-bold">${price}</span>
-          </p>
-
-          <div className="text-md text-gray-700 mb-6">
-            <p className="flex items-center">
-              <FaClock className="mr-2 text-red-600" />
-              <span className="font-semibold">
-                <b>Duration:</b> {duration || "Not specified"}
-              </span>
-            </p>
-            <p className="flex items-center">
-              <FaListAlt className="mr-2 text-red-600" />
-              <span className="font-semibold">
-                <b>Time:</b> {totalHours || "Not specified"} Hours
-              </span>
-            </p>
-            <p className="flex items-center">
-              <FaGraduationCap className="mr-2 text-red-600" />
-              <span className="font-semibold">
-                <b>Credential:</b> {credential || "Not specified"}
-              </span>
-            </p>
-            <p className="flex items-center">
-              <FaCertificate className="mr-2 text-red-600" />
-              <span className="font-semibold">
-                <b>Pre-Requisite:</b> {preRequisite || "Not specified"}
-              </span>
-            </p>
-          </div>
-
-          {/* Enroll / Sign In Button */}
-          <button
-            className={`w-full py-3 px-4 ${
-              isSignedIn ? "bg-green-400 hover:bg-green-700" : "bg-blue-500 hover:bg-blue-700"
-            } text-white text-2xl font-semibold rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500`}
-            data-aos="zoom-in"
-            onClick={handleEnroll}
-          >
-            {isSignedIn ? "Enroll Now" : "Sign in to Enroll"}
-          </button>
-
-          {/* Video */}
-          <div className="mt-6 mb-4" data-aos="fade-up">
-            <iframe
-              className="w-full h-64 rounded-lg shadow-lg"
-              src="https://www.youtube.com/embed/-sfMwZ3dJPw"
-              title="Course Introduction"
-              frameBorder="0"
-              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
-          </div>
+          <ul className="space-y-3 bg-indigo-50 border border-indigo-200 p-6 rounded-lg">
+            {allOutcomes.map((item, idx) => (
+              <li key={idx} className="flex items-start gap-2 text-gray-800">
+                <FaCheckCircle className="mt-1 text-[#57B4BA]" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      </main>
+
+      {/* Sticky Bar for Mobile */}
+      {!isEnrolled && (
+        <div className="md:hidden fixed bottom-0 w-full left-0 bg-gray-100 border-t border-gray-300 shadow-lg z-30 flex justify-between items-center px-4 py-3">
+          <div>
+            <span className="font-bold text-gray-800 text-lg">${price}</span>
+            <span className="text-xs text-green-500 ml-2 font-semibold">
+              20% off
+            </span>
+          </div>
+          <button
+            onClick={handleEnroll}
+            className="bg-[#57B4BA] hover:bg-[#45a3a0] text-white font-bold py-2 px-5 rounded-lg text-sm transition"
+          >
+            {user ? "Enroll" : "Sign in"}
+          </button>
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer className="w-full py-8 px-4 mt-14 bg-gray-100 text-gray-600 text-center border-t">
+        <span className="font-semibold">
+          © {new Date().getFullYear()} Your Academy. All rights reserved.
+        </span>
+      </footer>
     </div>
   );
 };
+
+// Helper Component for icon-label pairs
+const DetailItem = ({ icon, label }) => (
+  <div className="flex items-center gap-2 text-sm">
+    <span className="text-[#57B4BA]">{icon}</span>
+    <span>{label}</span>
+  </div>
+);
+
+// Box for Start Date / End Date / Seats
+const InfoBox = ({ label, value }) => (
+  <div>
+    <p className="text-sm text-gray-600">{label}</p>
+    <p className="text-lg font-semibold text-[#57B4BA]">{value}</p>
+  </div>
+);
 
 export default CourseDetail;

@@ -12,6 +12,7 @@ const { auth } = require("./middleware/authMiddleware");
 const courseRoutes = require("./routes/courseRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 const app = express();
 app.use(cors());
 app.use(express.json()); // Enable JSON parsing for POST requests
@@ -23,7 +24,10 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log("MongoDB Connected"))
+  .then(() => {
+    console.log("MongoDB Connected");
+    console.log(`📡 Connected to DB: ${process.env.MONGODB_URI}`);
+  })
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
 mongoose.connection.on("error", (err) => {
@@ -39,6 +43,7 @@ app.use("/users", auth(["admin"]), userRoutes);
 app.use("/courses", courseRoutes);
 app.use("/blogs", blogRoutes);
 app.use("/gallery", galleryRoutes);
+app.use("/payment", paymentRoutes);
 
 // PayPal configuration
 paypal.configure({

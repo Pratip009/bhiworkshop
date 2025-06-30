@@ -1,11 +1,15 @@
 const express = require("express");
-const { getUsers, deleteUser } = require("../controllers/userController");
+const { getUsers, deleteUser, getUserById } = require("../controllers/userController");
 const { auth } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// ✅ Explicitly pass "admin" role for authentication
+// 🛠 Existing admin routes
+router.get("/:id", auth(), getUserById);
 router.get("/", auth(["admin"]), getUsers);
 router.delete("/:id", auth(["admin"]), deleteUser);
+
+
+// <-- Allow user to fetch their own profile
 
 module.exports = router;

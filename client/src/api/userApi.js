@@ -55,24 +55,19 @@ export const deleteUser = async (id) => {
   }
 };
 
-export const fetchUserProfile = async (userId) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    console.error("❌ No token found! Redirecting to login.");
-    return null;
-  }
-
+export const fetchUserProfile = async (userId, token) => {
   try {
     const response = await axios.get(`${API_URL}/users/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     console.log("✅ User profile:", response.data);
     return response.data;
   } catch (error) {
     console.error(
-      "❌ Error fetching user profile:",
+      "❌ fetchUserProfile error: ",
       error.response?.data || error.message
     );
     return null;

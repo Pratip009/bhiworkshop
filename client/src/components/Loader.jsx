@@ -3,20 +3,17 @@
 import PropTypes from "prop-types";
 
 const SpinnerLoader = ({
-  src = "/loaderanimation.webm",
+  src = "/spinner.svg",
   width = 200,
   height = 200,
 }) => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
-      <video
+    <div className="flex items-center justify-center min-h-screen bg-transparent">
+      <img
         src={src}
         width={width}
         height={height}
-        autoPlay
-        loop
-        muted
-        playsInline
+        alt="Loading..."
       />
     </div>
   );

@@ -1,4 +1,9 @@
-import { FaWhatsapp, FaEnvelope, FaFacebook, FaInstagram } from "react-icons/fa";
+import {
+  FaWhatsapp,
+  FaEnvelope,
+  FaFacebook,
+  FaInstagram,
+} from "react-icons/fa";
 
 const FloatingButtons = () => {
   const phoneNumber = "2013771594"; // Ensure correct format
