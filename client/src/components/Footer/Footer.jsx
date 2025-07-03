@@ -40,44 +40,47 @@ const Footer = () => {
 
   return (
     <footer
-      className="py-10 bg-[#57B4BA] shadow-md border-b border-gray-700 text-white sm:pt-16 lg:pt-24"
+      className="py-10 bg-white shadow-[0_-2px_24px_0_rgba(62,198,224,0.08)] border-t border-gray-100 font-play"
       style={{ fontFamily: "Play, sans-serif" }}
     >
-      <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-16 gap-x-12">
-          <div className="col-span-2 md:col-span-3 lg:col-span-2 lg:pr-8">
-            <img className="w-auto h-14" src={logo} alt="Logo" />
-            <p className="text-base leading-relaxed text-white mt-7">
-              Online or in person, Bright Horizon Institute helps you gain real
-              skills for real careers. Learn fast, train smart, and step into
-              the workforce with confidence. We’re here for you!
+      <div className="px-4 mx-auto sm:px-6 lg:px-12 max-w-7xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-12 gap-x-6">
+          {/* Logo & Social Section */}
+          <div className="col-span-1 sm:col-span-2 lg:col-span-2 flex flex-col items-center sm:items-start text-center sm:text-left">
+            <img className="w-14 h-14 mb-4 bg-gray-800 rounded" src={logo} alt="Logo" />
+            <p className="text-base text-gray-600 leading-relaxed mt-2">
+              Online or in person,{" "}
+              <span className="font-semibold text-[#3EC6E0]">Bright Horizon Institute</span>{" "}
+              helps you gain real skills for real careers.
             </p>
-            <ul className="flex items-center space-x-3 mt-9">
+            <ul className="flex items-center justify-center sm:justify-start space-x-3 mt-6">
               {socialLinks.map((social, index) => (
                 <li key={index}>
                   <a
                     href={social.link}
                     title={social.name}
-                    className="flex items-center justify-center text-white transition-all duration-200 bg-gray-700 rounded-full w-8 h-8 hover:bg-[#fb2c36] focus:bg-[#fb2c36]"
+                    className="flex items-center justify-center text-[#3EC6E0] transition-all duration-200 bg-[#f4fafd] hover:bg-[#3EC6E0] hover:text-white focus:bg-[#3EC6E0] rounded-full w-10 h-10 shadow-sm"
                   >
-                    <social.icon className="w-4 h-4" />
+                    <social.icon className="w-5 h-5" />
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
+          {/* Link Sections */}
           {sections.map((section, index) => (
             <div key={index}>
-              <p className="text-sm font-semibold tracking-widest text-gray-200 uppercase">
+              <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-2 text-center sm:text-left">
                 {section.title}
               </p>
-              <ul className="mt-6 space-y-4">
+              <ul className="mt-4 space-y-3 text-center sm:text-left">
                 {section.links.map((link, i) => (
                   <li key={i}>
                     <Link
                       to={link.url}
-                      className="flex text-base text-white hover:text-[#fb2c36] transition-all duration-200"
+                      className="text-[15px] text-gray-600 hover:text-[#3EC6E0] transition-all duration-200 font-medium"
+                      style={{ textDecoration: "none" }}
                     >
                       {link.name}
                     </Link>
@@ -87,25 +90,25 @@ const Footer = () => {
             </div>
           ))}
 
-          {/* Address Section */}
-          <div className="col-span-2 md:col-span-1 lg:col-span-2 lg:pl-8">
-            <p className="text-sm font-semibold tracking-widest text-gray-200 uppercase">
+          {/* Contact Section */}
+          <div className="col-span-1 sm:col-span-2 lg:col-span-2 text-center sm:text-left">
+            <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-2">
               Contact Us
             </p>
-            <div className="mt-6 text-base text-gray-200 space-y-1">
+            <div className="mt-4 text-[15px] text-gray-500 space-y-1">
               <p>591 Summit Ave, Suite No. 400</p>
               <p>Jersey City, New Jersey, NJ 07306</p>
-              <p className="mt-2">📞 201-377-1594</p>
-              <p className="mt-1">✉️ admin@bhilearning.com</p>
+              <p className="mt-2 font-semibold text-[#3EC6E0]">📞 201-377-1594</p>
+              <p className="mt-1 font-semibold text-[#3EC6E0]">✉️ admin@bhilearning.com</p>
             </div>
           </div>
         </div>
 
-        <hr className="mt-16 mb-10 border-gray-100" />
+        <hr className="mt-12 mb-8 border-gray-200" />
 
-        <p className="text-sm text-center text-gray-200">
-          © {new Date().getFullYear()} Bright Horizon Institute. All rights
-          reserved.
+        <p className="text-sm text-center text-gray-400 font-medium">
+          © {new Date().getFullYear()}{" "}
+          <span className="text-[#3EC6E0] font-bold">Bright Horizon Institute</span>. All rights reserved.
         </p>
       </div>
     </footer>

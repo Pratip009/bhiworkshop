@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 const Sidebar = ({ active, setActive }) => {
-  const menuItems = ["Users", "Add Courses", "Payments"];
+  const menuItems = ["Users", "Add Courses", "Payments", "Contact Messages"];
 
   return (
     <div className="w-64 bg-gray-900 text-white flex flex-col p-4">

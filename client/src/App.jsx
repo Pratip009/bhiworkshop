@@ -27,6 +27,7 @@ import Profile from "./Pages/Profile/Profile";
 import TermsAndConditions from "./Pages/TermsAndConditions";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Payment from "./components/Admin/Payment";
+import UserMessages from "./components/Admin/UserMessages";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -99,6 +100,14 @@ const App = () => {
               element={
                 <ProtectedRoute roles={["admin"]}>
                   <Payment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute roles={["admin"]}>
+                  <UserMessages />
                 </ProtectedRoute>
               }
             />
