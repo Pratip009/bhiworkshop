@@ -19,7 +19,8 @@ const AddBlog = () => {
   useEffect(() => {
     fetchBlogs();
   }, []);
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const API_URL =
+    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
   const fetchBlogs = async () => {
     try {
       const { data } = await axios.get(`${API_URL}/blogs`);

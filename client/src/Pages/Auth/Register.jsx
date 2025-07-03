@@ -1,7 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { FaUser, FaLock, FaEnvelope, FaMobile, FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaUser,
+  FaLock,
+  FaEnvelope,
+  FaMobile,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -9,7 +16,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const API_URL =
+    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -140,7 +148,10 @@ const Register = () => {
         {/* Login Link */}
         <p className="mt-6 text-center text-gray-400">
           Already have an account?{" "}
-          <a href="/login" className="text-green-400 font-medium hover:underline">
+          <a
+            href="/login"
+            className="text-green-400 font-medium hover:underline"
+          >
             Log in
           </a>
         </p>

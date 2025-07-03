@@ -9,7 +9,8 @@ const AddGalleryImage = () => {
   const [loading, setLoading] = useState(false);
   const [galleryImages, setGalleryImages] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const API_URL =
+    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
   // Handle image selection
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];

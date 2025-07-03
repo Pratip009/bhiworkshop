@@ -15,7 +15,8 @@ export default function PopularCourses() {
       once: true,
     });
 
-    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+    const API_URL =
+      import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
 
     const fetchCourses = async () => {
       try {
@@ -36,7 +37,10 @@ export default function PopularCourses() {
   }, []);
 
   return (
-    <section className="text-center py-16 bg-white text-black mb-4" style={{ fontFamily: "Play, sans-serif" }}>
+    <section
+      className="text-center py-16 bg-white text-black mb-4"
+      style={{ fontFamily: "Play, sans-serif" }}
+    >
       <span className="text-sm text-red-400 font-semibold">
         LEARN AT YOUR OWN PACE
       </span>
@@ -46,8 +50,8 @@ export default function PopularCourses() {
       </h1>
 
       <p className="mt-8 text-base sm:text-xl text-gray-600 max-w-4xl mx-auto">
-        Bright Horizon Institute offers students a high-quality workshop programs
-        taught by experienced instructors.
+        Bright Horizon Institute offers students a high-quality workshop
+        programs taught by experienced instructors.
       </p>
 
       <div className="mt-10 px-4">

@@ -4,7 +4,8 @@ import axios from "axios";
 const Payment = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const API_URL =
+    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
 
   useEffect(() => {
     const fetchPayments = async () => {

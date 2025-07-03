@@ -72,11 +72,14 @@ const Contact = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://bhiworkshop-1.onrender.com/contact",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {

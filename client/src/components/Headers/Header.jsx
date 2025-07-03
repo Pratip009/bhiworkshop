@@ -10,7 +10,8 @@ const ACCENT = "#FFFFFFFF"; // fresh teal accent
 const SECONDARY = "#144AB0FF"; // soft blue
 
 const Header = () => {
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const API_URL =
+    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [coursesData, setCoursesData] = useState([]);
@@ -140,7 +141,8 @@ const Header = () => {
                       {course.totalHours} • {course.duration}
                     </span>
                     <span className="text-sm text-gray-500">
-                      🎓 {course.certification} &nbsp;|&nbsp; 🏅 {course.credential}
+                      🎓 {course.certification} &nbsp;|&nbsp; 🏅{" "}
+                      {course.credential}
                     </span>
                   </div>
                 </div>
