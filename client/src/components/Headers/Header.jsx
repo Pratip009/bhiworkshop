@@ -10,8 +10,7 @@ const ACCENT = "#FFFFFFFF"; // fresh teal accent
 const SECONDARY = "#144AB0FF"; // soft blue
 
 const Header = () => {
-  const API_URL =
-    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [coursesData, setCoursesData] = useState([]);
@@ -88,7 +87,8 @@ const Header = () => {
       style={{
         background: PRIMARY_BG,
         borderColor: ACCENT,
-        fontFamily: "Play, sans-serif",
+        fontFamily: 'Play',
+       
       }}
     >
       <div className="px-6 mx-auto max-w-8xl sm:px-8 lg:px-12 flex items-center justify-between h-20">
@@ -176,7 +176,8 @@ const Header = () => {
                   background: isActive ? SECONDARY : "transparent",
                   fontWeight: isActive ? "bold" : "normal",
                   textDecoration: "none",
-                  fontFamily: "Play, sans-serif",
+                  fontFamily: 'Play',
+                
                   transition: "background 0.2s, color 0.2s",
                 }}
               >
@@ -196,7 +197,8 @@ const Header = () => {
                 style={{
                   color: "#293241",
                   fontWeight: "bold",
-                  fontFamily: "Play, sans-serif",
+                  fontFamily: 'Play',
+                
                   letterSpacing: "0.03em",
                   cursor: "pointer",
                 }}
@@ -212,7 +214,8 @@ const Header = () => {
                 className="px-6 py-2 rounded-full font-semibold transition border border-[#70c1b3] bg-white hover:bg-[#e2f6f5] text-[#293241] shadow"
                 style={{
                   fontWeight: "bold",
-                  fontFamily: "Play, sans-serif",
+                  fontFamily: 'Play',
+                  
                   letterSpacing: "0.03em",
                   border: "1.5px solid #70c1b3",
                   position: "relative",
@@ -344,7 +347,8 @@ const Header = () => {
                   className="block text-center rounded-full font-semibold shadow-md transition border border-[#70c1b3] bg-white hover:bg-[#e2f6f5] text-[#293241]"
                   style={{
                     fontWeight: "bold",
-                    fontFamily: "Play, sans-serif",
+                    fontFamily: 'Play',
+                  
                     letterSpacing: "0.03em",
                     border: "1.5px solid #70c1b3",
                     padding: "0.75rem 0",

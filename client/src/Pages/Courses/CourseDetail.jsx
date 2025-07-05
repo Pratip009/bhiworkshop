@@ -28,8 +28,7 @@ const CourseDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL =
-    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,7 +116,8 @@ const CourseDetail = () => {
 
   return (
     <div
-      className="min-h-screen bg-white text-black"
+      className="min-h-screen bg-[#f9fafb] text-black"
+
       style={{ fontFamily: "Play, sans-serif" }}
     >
       <main className="max-w-7xl mx-auto px-4 py-12">
@@ -182,7 +182,12 @@ const CourseDetail = () => {
                 </span>
               )}
             </div>
-
+            <div className="bg-yellow-100 border-l-4 border-yellow-400 text-yellow-800 text-sm sm:text-base font-medium px-4 py-3 rounded-md shadow-sm mb-8">
+              🎯 <strong>Get individual attention:</strong> Our dedicated coach
+              ensures individual attention for every participant.{" "}
+              <strong>Reserve your spot now</strong> and enjoy personalized
+              guidance.
+            </div>
             {/* Date & Seat Info */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center bg-indigo-50 border border-indigo-300 rounded-lg p-4 mb-10">
               <InfoBox label="Start Date" value={startDate || "N/A"} />

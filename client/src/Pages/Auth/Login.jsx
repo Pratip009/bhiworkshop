@@ -14,8 +14,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const API_URL =
-    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

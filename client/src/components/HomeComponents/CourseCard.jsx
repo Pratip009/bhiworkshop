@@ -6,13 +6,13 @@ import { SlCalender } from "react-icons/sl";
 import AuthContext from "../../context/AuthContext";
 
 // Modern, vibrant palette and card style
-const CARD_BG = "linear-gradient(135deg, #f9f9ff 0%, #e0f7fa 100%)";
-const ACCENT = "#3EC6E0";
+const CARD_BG = "#ffffff"; // clean white background
+const ACCENT = "#144AB0"; // your brand's primary accent
 const ACCENT_DARK = "#249eb5";
-const BADGE_BG = "linear-gradient(90deg, #ffb09e 0%, #ffd6e0 100%)";
-const TITLE_COLOR = "#232c47";
-const DESC_COLOR = "#4b5563";
-const SEAT_COLOR = "#000000FF";
+const BADGE_BG = "#FF6B57"; // solid modern badge
+const TITLE_COLOR = "#1F2937"; // dark gray/blue for better readability
+const DESC_COLOR = "#6B7280"; // soft gray for descriptions
+const SEAT_COLOR = "#ffffff";
 
 const CourseCard = ({ courses }) => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const CourseCard = ({ courses }) => {
           key={course._id}
           className="w-full rounded-3xl shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 border-0 flex flex-col relative overflow-hidden"
           style={{
-            fontFamily: "Play, sans-serif",
+            fontFamily: "Play",
             background: CARD_BG,
             color: TITLE_COLOR,
             minHeight: 430,
@@ -56,7 +56,7 @@ const CourseCard = ({ courses }) => {
               className="w-full h-48 object-cover rounded-t-3xl transition-transform duration-300 group-hover:scale-105"
               style={{
                 boxShadow: "0 6px 18px 0 rgba(62, 198, 224, 0.12)",
-                borderBottom: "4px solid #3EC6E0",
+                borderBottom: "4px solid #144AB0",
               }}
             />
             <span
@@ -69,7 +69,7 @@ const CourseCard = ({ courses }) => {
                 boxShadow: "0 2px 8px 0 rgba(255,176,158,0.13)",
               }}
             >
-              {course.availableSeats ?? "0"} Seats
+              limited seats
             </span>
           </div>
 
@@ -88,11 +88,11 @@ const CourseCard = ({ courses }) => {
 
             <div className="flex justify-center text-sm gap-7 mb-2">
               <div className="flex items-center gap-2">
-                <FaClock className="text-[#3EC6E0] opacity-70" />
+                <FaClock className="text-[#144AB0] opacity-70" />
                 <span className="font-medium">{course.totalHours}</span>
               </div>
               <div className="flex items-center gap-2">
-                <SlCalender className="text-[#3EC6E0] opacity-70" />
+                <SlCalender className="text-[#144AB0] opacity-70" />
                 <span className="font-medium">{course.duration}</span>
               </div>
             </div>
@@ -134,12 +134,10 @@ const CourseCard = ({ courses }) => {
                 border: "none",
                 fontFamily: "Kanit, sans-serif",
               }}
-              onMouseOver={e =>
+              onMouseOver={(e) =>
                 (e.currentTarget.style.background = ACCENT_DARK)
               }
-              onMouseOut={e =>
-                (e.currentTarget.style.background = ACCENT)
-              }
+              onMouseOut={(e) => (e.currentTarget.style.background = ACCENT)}
             >
               View Program
             </button>

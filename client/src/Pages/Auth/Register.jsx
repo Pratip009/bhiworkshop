@@ -16,8 +16,7 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [contact, setContact] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const API_URL =
-    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

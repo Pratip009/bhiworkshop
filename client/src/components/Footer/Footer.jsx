@@ -3,7 +3,8 @@ import {
   FaTwitter,
   FaInstagram,
   FaLinkedin,
-  FaGithub,
+  
+  FaTiktok,
 } from "react-icons/fa";
 import logo from "../../assets/images/favicon.png";
 import { Link } from "react-router-dom";
@@ -14,7 +15,7 @@ const Footer = () => {
     { name: "Twitter", icon: FaTwitter, link: "#" },
     { name: "Instagram", icon: FaInstagram, link: "#" },
     { name: "LinkedIn", icon: FaLinkedin, link: "#" },
-    { name: "GitHub", icon: FaGithub, link: "#" },
+    { name: "Tiktok", icon: FaTiktok, link: "#" },
   ];
 
   const sections = [
@@ -47,10 +48,16 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-y-12 gap-x-6">
           {/* Logo & Social Section */}
           <div className="col-span-1 sm:col-span-2 lg:col-span-2 flex flex-col items-center sm:items-start text-center sm:text-left">
-            <img className="w-14 h-14 mb-4 bg-gray-800 rounded" src={logo} alt="Logo" />
+            <img
+              className="w-14 h-14 mb-4 bg-gray-800 rounded"
+              src={logo}
+              alt="Logo"
+            />
             <p className="text-base text-gray-600 leading-relaxed mt-2">
               Online or in person,{" "}
-              <span className="font-semibold text-[#3EC6E0]">Bright Horizon Institute</span>{" "}
+              <span className="font-semibold text-[#144AB0]">
+                Bright Horizon Institute
+              </span>{" "}
               helps you gain real skills for real careers.
             </p>
             <ul className="flex items-center justify-center sm:justify-start space-x-3 mt-6">
@@ -59,7 +66,7 @@ const Footer = () => {
                   <a
                     href={social.link}
                     title={social.name}
-                    className="flex items-center justify-center text-[#3EC6E0] transition-all duration-200 bg-[#f4fafd] hover:bg-[#3EC6E0] hover:text-white focus:bg-[#3EC6E0] rounded-full w-10 h-10 shadow-sm"
+                    className="flex items-center justify-center text-[#144AB0] transition-all duration-200 bg-[#f4fafd] hover:bg-[#144AB0] hover:text-white focus:bg-[#144AB0] rounded-full w-10 h-10 shadow-sm"
                   >
                     <social.icon className="w-5 h-5" />
                   </a>
@@ -79,7 +86,7 @@ const Footer = () => {
                   <li key={i}>
                     <Link
                       to={link.url}
-                      className="text-[15px] text-gray-600 hover:text-[#3EC6E0] transition-all duration-200 font-medium"
+                      className="text-[15px] text-gray-600 hover:text-[#144AB0] transition-all duration-200 font-medium"
                       style={{ textDecoration: "none" }}
                     >
                       {link.name}
@@ -98,8 +105,12 @@ const Footer = () => {
             <div className="mt-4 text-[15px] text-gray-500 space-y-1">
               <p>591 Summit Ave, Suite No. 400</p>
               <p>Jersey City, New Jersey, NJ 07306</p>
-              <p className="mt-2 font-semibold text-[#3EC6E0]">📞 201-377-1594</p>
-              <p className="mt-1 font-semibold text-[#3EC6E0]">✉️ admin@bhilearning.com</p>
+              <p className="mt-2 font-semibold text-[#144AB0]">
+                📞 201-377-1594
+              </p>
+              <p className="mt-1 font-semibold text-[#144AB0]">
+                ✉️ admin@bhilearning.com
+              </p>
             </div>
           </div>
         </div>
@@ -108,7 +119,10 @@ const Footer = () => {
 
         <p className="text-sm text-center text-gray-400 font-medium">
           © {new Date().getFullYear()}{" "}
-          <span className="text-[#3EC6E0] font-bold">Bright Horizon Institute</span>. All rights reserved.
+          <span className="text-[#144AB0] font-bold">
+            Bright Horizon Institute
+          </span>
+          . All rights reserved.
         </p>
       </div>
     </footer>

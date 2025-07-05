@@ -7,8 +7,7 @@ import "aos/dist/aos.css";
 const PaymentOptions = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const API_URL =
-    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   const course = location.state?.course;
 

@@ -7,7 +7,8 @@ const Banner = ({ text, imageUrl }) => {
       className="relative w-full h-80 flex items-center justify-center rounded-2xl overflow-hidden shadow-lg bg-cover bg-no-repeat bg-center"
       style={{
         backgroundImage: `url(${imageUrl})`, // Dynamically set the background image
-        fontFamily: "Play, sans-serif", // Use Play font for the banner text
+        fontFamily: '"Amarante", serif',
+        // Use Play font for the banner text
       }}
     >
       {/* Overlay for better text visibility */}

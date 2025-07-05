@@ -18,8 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Enable JSON parsing for POST requests
 app.use(compression());
-const BASE_URL =
-  process.env.REACT_APP_API_URL || "https://bhiworkshop-1.onrender.com";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 // MongoDB connection with error handling
 mongoose
   .connect(process.env.MONGODB_URI, {

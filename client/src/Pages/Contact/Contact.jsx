@@ -72,14 +72,11 @@ const Contact = () => {
     }
 
     try {
-      const response = await fetch(
-        "https://bhiworkshop-1.onrender.com/contact",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch("http://localhost:8000/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
@@ -116,17 +113,17 @@ const Contact = () => {
           {/* Contact Info */}
           <div className="space-y-6" data-aos="fade-right">
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-              <FaMapMarkerAlt className="text-green-400 text-2xl animate-bounce" />
+              <FaMapMarkerAlt className="text-[#144AB0] text-2xl animate-bounce" />
               <span className="text-gray-800">
                 591 Summit Ave, Suite No. 400, Jersey City, NJ 07306
               </span>
             </div>
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-              <FaEnvelope className="text-green-400 text-2xl animate-bounce" />
+              <FaEnvelope className="text-[#144AB0] text-2xl animate-bounce" />
               <span className="text-gray-800">admin@bhilearning.com</span>
             </div>
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-              <FaPhone className="text-green-400 text-2xl animate-bounce" />
+              <FaPhone className="text-[#144AB0] text-2xl animate-bounce" />
               <span className="text-gray-800">201-377-1594</span>
             </div>
 
@@ -136,7 +133,7 @@ const Contact = () => {
             >
               <iframe
                 title="map"
-                className="w-full h-64"
+                className="w-full h-84"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.2404959499418!2d-74.0622150245004!3d40.73473333622442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25730cc0c700d%3A0x5d67811a0fa442ef!2sBright%20Horizon%20Institute!5e0!3m2!1sen!2sin!4v1749047877573!5m2!1sen!2sin"
                 style={{ border: 0 }}
                 allowFullScreen
@@ -216,14 +213,14 @@ const Contact = () => {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-green-400 text-black font-semibold py-3 rounded-xl hover:shadow-xl transition-transform hover:scale-105 duration-300"
+              className="w-full bg-[#144AB0] text-white font-semibold py-3 rounded-xl hover:shadow-xl transition-transform hover:scale-105 duration-300"
             >
               Tell Us Your Thoughts
             </button>
 
             {/* Success Message */}
             {success && (
-              <p className="text-green-400 text-center mt-4">{success}</p>
+              <p className="text-[#144AB0] text-center mt-4">{success}</p>
             )}
           </form>
         </div>

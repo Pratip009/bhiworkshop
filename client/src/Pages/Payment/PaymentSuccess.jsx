@@ -7,8 +7,7 @@ import axios from "axios";
 const PaymentSuccess = () => {
   const [verifying, setVerifying] = useState(true);
   const [status, setStatus] = useState("Verifying payment...");
-  const API_URL =
-    import.meta.env.VITE_API_URL || "https://bhiworkshop-1.onrender.com";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
   const location = useLocation();
   useEffect(() => {
     AOS.init({ duration: 1000 });
