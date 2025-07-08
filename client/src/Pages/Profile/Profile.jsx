@@ -39,7 +39,12 @@ const Profile = () => {
   }, []);
 
   const renderProfileTab = () => (
-    <div className="bg-white p-8 rounded-xl shadow-xl max-w-lg mx-auto text-black">
+    <div
+      className="bg-white p-8 rounded-xl shadow-xl max-w-lg mx-auto text-black"
+      style={{
+        fontFamily: "Play, sans-serif",
+      }}
+    >
       <div className="flex items-center mb-6">
         <div className="w-16 h-16 rounded-full bg-blue-500 flex items-center justify-center text-2xl font-bold uppercase text-white">
           {user?.username?.[0] || "U"}
@@ -81,6 +86,9 @@ const Profile = () => {
               <div
                 key={entry._id}
                 className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform hover:scale-105 hover:shadow-2xl"
+                style={{
+                  fontFamily: "Play, sans-serif",
+                }}
               >
                 <div className="relative">
                   <img

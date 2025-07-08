@@ -3,7 +3,6 @@ import {
   FaTwitter,
   FaInstagram,
   FaLinkedin,
-  
   FaTiktok,
 } from "react-icons/fa";
 import logo from "../../assets/images/favicon.png";
@@ -55,7 +54,7 @@ const Footer = () => {
             />
             <p className="text-base text-gray-600 leading-relaxed mt-2">
               Online or in person,{" "}
-              <span className="font-semibold text-[#144AB0]">
+              <span className="font-semibold text-[#F4D94A]">
                 Bright Horizon Institute
               </span>{" "}
               helps you gain real skills for real careers.
@@ -66,7 +65,7 @@ const Footer = () => {
                   <a
                     href={social.link}
                     title={social.name}
-                    className="flex items-center justify-center text-[#144AB0] transition-all duration-200 bg-[#f4fafd] hover:bg-[#144AB0] hover:text-white focus:bg-[#144AB0] rounded-full w-10 h-10 shadow-sm"
+                    className="flex items-center justify-center text-[#F4D94A] transition-all duration-200 bg-[#f4fafd] hover:bg-[#F4D94A] hover:text-white focus:bg-[#F4D94A] rounded-full w-10 h-10 shadow-sm"
                   >
                     <social.icon className="w-5 h-5" />
                   </a>
@@ -86,7 +85,7 @@ const Footer = () => {
                   <li key={i}>
                     <Link
                       to={link.url}
-                      className="text-[15px] text-gray-600 hover:text-[#144AB0] transition-all duration-200 font-medium"
+                      className="text-[15px] text-gray-600 hover:text-[#F4D94A] transition-all duration-200 font-medium"
                       style={{ textDecoration: "none" }}
                     >
                       {link.name}
@@ -105,10 +104,10 @@ const Footer = () => {
             <div className="mt-4 text-[15px] text-gray-500 space-y-1">
               <p>591 Summit Ave, Suite No. 400</p>
               <p>Jersey City, New Jersey, NJ 07306</p>
-              <p className="mt-2 font-semibold text-[#144AB0]">
+              <p className="mt-2 font-semibold text-[#F4D94A]">
                 📞 201-377-1594
               </p>
-              <p className="mt-1 font-semibold text-[#144AB0]">
+              <p className="mt-1 font-semibold text-[#F4D94A]">
                 ✉️ admin@bhilearning.com
               </p>
             </div>
@@ -119,7 +118,7 @@ const Footer = () => {
 
         <p className="text-sm text-center text-gray-400 font-medium">
           © {new Date().getFullYear()}{" "}
-          <span className="text-[#144AB0] font-bold">
+          <span className="text-[#F4D94A] font-bold">
             Bright Horizon Institute
           </span>
           . All rights reserved.

@@ -18,40 +18,29 @@ const Contact = () => {
 
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const validateForm = () => {
     const newErrors = {};
     const { name, email, phone, message } = formData;
 
-    // Name
-    if (!name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (name.trim().length < 2) {
+    if (!name.trim()) newErrors.name = "Name is required";
+    else if (name.trim().length < 2)
       newErrors.name = "Name must be at least 2 characters";
-    }
 
-    // Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!emailRegex.test(email.trim())) {
+    if (!email.trim()) newErrors.email = "Email is required";
+    else if (!emailRegex.test(email.trim()))
       newErrors.email = "Please enter a valid email address";
-    }
 
-    // USA Phone
     const phoneRegex = /^(\+1\s?)?(\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$/;
-    if (!phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else if (!phoneRegex.test(phone.trim())) {
+    if (!phone.trim()) newErrors.phone = "Phone number is required";
+    else if (!phoneRegex.test(phone.trim()))
       newErrors.phone = "Enter a valid US phone number (e.g., 123-456-7890)";
-    }
 
-    // Message
-    if (!message.trim()) {
-      newErrors.message = "Message cannot be empty";
-    } else if (message.trim().length < 10) {
+    if (!message.trim()) newErrors.message = "Message cannot be empty";
+    else if (message.trim().length < 10)
       newErrors.message = "Message must be at least 10 characters";
-    }
 
     return newErrors;
   };
@@ -59,24 +48,29 @@ const Contact = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setSuccess(""); // reset success on typing
+    setSuccess("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
+      setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8000/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://bhiworkshop-1.onrender.com/contact",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
@@ -84,6 +78,7 @@ const Contact = () => {
         if (response.ok) {
           setSuccess("Thank you! Your message has been sent successfully.");
           setFormData({ name: "", email: "", phone: "", message: "" });
+          setErrors({});
         } else {
           setSuccess(data.message || "Something went wrong.");
         }
@@ -95,6 +90,8 @@ const Contact = () => {
     } catch (error) {
       console.error("Error sending contact form:", error);
       setSuccess("Server error. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,17 +110,17 @@ const Contact = () => {
           {/* Contact Info */}
           <div className="space-y-6" data-aos="fade-right">
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-              <FaMapMarkerAlt className="text-[#144AB0] text-2xl animate-bounce" />
+              <FaMapMarkerAlt className="text-[#F4D94A] text-2xl animate-bounce" />
               <span className="text-gray-800">
                 591 Summit Ave, Suite No. 400, Jersey City, NJ 07306
               </span>
             </div>
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-              <FaEnvelope className="text-[#144AB0] text-2xl animate-bounce" />
+              <FaEnvelope className="text-[#F4D94A] text-2xl animate-bounce" />
               <span className="text-gray-800">admin@bhilearning.com</span>
             </div>
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
-              <FaPhone className="text-[#144AB0] text-2xl animate-bounce" />
+              <FaPhone className="text-[#F4D94A] text-2xl animate-bounce" />
               <span className="text-gray-800">201-377-1594</span>
             </div>
 
@@ -210,17 +207,22 @@ const Contact = () => {
               )}
             </div>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-[#144AB0] text-white font-semibold py-3 rounded-xl hover:shadow-xl transition-transform hover:scale-105 duration-300"
+              className="w-full bg-[#F4D94A] text-white font-semibold py-3 rounded-xl hover:shadow-xl transition-transform hover:scale-105 duration-300 flex justify-center items-center"
+              disabled={loading}
             >
-              Tell Us Your Thoughts
+              {loading ? (
+                <div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                "Tell Us Your Thoughts"
+              )}
             </button>
 
             {/* Success Message */}
             {success && (
-              <p className="text-[#144AB0] text-center mt-4">{success}</p>
+              <p className="text-[#F4D94A] text-center mt-4">{success}</p>
             )}
           </form>
         </div>

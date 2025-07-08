@@ -11,11 +11,14 @@ const UserMessages = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch("http://localhost:8000/contact", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        "https://bhiworkshop-1.onrender.com/contact",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to fetch messages");
 

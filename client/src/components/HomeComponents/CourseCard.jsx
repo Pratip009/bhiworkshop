@@ -7,7 +7,7 @@ import AuthContext from "../../context/AuthContext";
 
 // Modern, vibrant palette and card style
 const CARD_BG = "#ffffff"; // clean white background
-const ACCENT = "#144AB0"; // your brand's primary accent
+const ACCENT = "#F4D94A"; // your brand's primary accent
 const ACCENT_DARK = "#249eb5";
 const BADGE_BG = "#FF6B57"; // solid modern badge
 const TITLE_COLOR = "#1F2937"; // dark gray/blue for better readability
@@ -56,7 +56,7 @@ const CourseCard = ({ courses }) => {
               className="w-full h-48 object-cover rounded-t-3xl transition-transform duration-300 group-hover:scale-105"
               style={{
                 boxShadow: "0 6px 18px 0 rgba(62, 198, 224, 0.12)",
-                borderBottom: "4px solid #144AB0",
+                borderBottom: "4px solid #F4D94A",
               }}
             />
             <span
@@ -88,11 +88,11 @@ const CourseCard = ({ courses }) => {
 
             <div className="flex justify-center text-sm gap-7 mb-2">
               <div className="flex items-center gap-2">
-                <FaClock className="text-[#144AB0] opacity-70" />
+                <FaClock className="text-[#F4D94A] opacity-70" />
                 <span className="font-medium">{course.totalHours}</span>
               </div>
               <div className="flex items-center gap-2">
-                <SlCalender className="text-[#144AB0] opacity-70" />
+                <SlCalender className="text-[#F4D94A] opacity-70" />
                 <span className="font-medium">{course.duration}</span>
               </div>
             </div>

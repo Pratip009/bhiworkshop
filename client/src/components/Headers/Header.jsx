@@ -7,7 +7,7 @@ import AuthContext from "../../context/AuthContext";
 // Modern pastel color palette (no gradients)
 const PRIMARY_BG = "#f7fafc"; // light pastel background
 const ACCENT = "#FFFFFFFF"; // fresh teal accent
-const SECONDARY = "#144AB0FF"; // soft blue
+const SECONDARY = "#F8DE55"; // soft yellow
 
 const Header = () => {
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";

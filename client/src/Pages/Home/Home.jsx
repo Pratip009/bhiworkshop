@@ -42,32 +42,31 @@ const Home = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-sm uppercase tracking-widest text-[#144AB0] font-semibold mb-4">
+            <h2 className="text-sm uppercase tracking-widest text-[#F4D94A] font-semibold mb-4">
               Transform Your Career
             </h2>
 
             {/* Animated Hero Text */}
-           <motion.h1
-  className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-snug mb-6 flex flex-wrap font-outfit"
-  variants={containerVariants}
-  initial="hidden"
-  animate="show"
->
-  {["Learn.", "Build.", "Achieve."].map((word, i) => (
-    <span key={i} className="mr-3">
-      {word.split("").map((char, index) => (
-        <motion.span
-          key={index}
-          variants={letterVariants}
-          className={word === "Achieve." ? "text-[#144AB0]" : ""}
-        >
-          {char}
-        </motion.span>
-      ))}
-    </span>
-  ))}
-</motion.h1>
-
+            <motion.h1
+              className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-snug mb-6 flex flex-wrap font-outfit"
+              variants={containerVariants}
+              initial="hidden"
+              animate="show"
+            >
+              {["Learn.", "Build.", "Achieve."].map((word, i) => (
+                <span key={i} className="mr-3">
+                  {word.split("").map((char, index) => (
+                    <motion.span
+                      key={index}
+                      variants={letterVariants}
+                      className={word === "Achieve." ? "text-[#F4D94A]" : ""}
+                    >
+                      {char}
+                    </motion.span>
+                  ))}
+                </span>
+              ))}
+            </motion.h1>
 
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
               Hands-on workshops with top mentors to boost your skills, create
@@ -92,7 +91,7 @@ const Home = () => {
 
             <Link
               to="/workshops"
-              className="inline-block bg-[#144AB0] hover:bg-[#1D4ED8] text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 text-base"
+              className="inline-block bg-[#F4D94A] hover:bg-[#1D4ED8] text-white font-semibold py-3 px-8 rounded-full shadow-lg transition duration-300 text-base"
               style={{ textDecoration: "none" }}
             >
               Browse Workshops
