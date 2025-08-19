@@ -10,7 +10,9 @@ const PopularCourses = lazy(() =>
 const FloatingButtons = lazy(() =>
   import("../../components/HomeComponents/FloatingButtons")
 );
-
+const InstructorCard = lazy(() =>
+  import("../../components/HomeComponents/InstructorCard")
+);
 // Animation Variants
 const containerVariants = {
   hidden: {},
@@ -123,6 +125,7 @@ const Home = () => {
           </div>
         }
       >
+        <InstructorCard />
         <PopularCourses />
         <FloatingButtons />
       </Suspense>

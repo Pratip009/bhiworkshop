@@ -28,6 +28,7 @@ import TermsAndConditions from "./Pages/TermsAndConditions";
 import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Payment from "./components/Admin/Payment";
 import UserMessages from "./components/Admin/UserMessages";
+import AddWorkshop from "./components/Admin/AddWorkshop";
 const App = () => {
   useEffect(() => {
     AOS.init({
@@ -92,6 +93,14 @@ const App = () => {
               element={
                 <ProtectedRoute roles={["admin"]}>
                   <AddCourse />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-workshop"
+              element={
+                <ProtectedRoute roles={["admin"]}>
+                  <AddWorkshop />
                 </ProtectedRoute>
               }
             />

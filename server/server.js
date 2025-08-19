@@ -14,6 +14,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const workshopRoutes = require("./routes/workshopRoutes");
 const app = express();
 app.use(cors());
 app.use(express.json()); // Enable JSON parsing for POST requests
@@ -46,6 +47,7 @@ app.use("/blogs", blogRoutes);
 app.use("/gallery", galleryRoutes);
 app.use("/payment", paymentRoutes);
 app.use("/contact", contactRoutes);
+app.use("/workshops", workshopRoutes);
 
 // PayPal configuration
 paypal.configure({

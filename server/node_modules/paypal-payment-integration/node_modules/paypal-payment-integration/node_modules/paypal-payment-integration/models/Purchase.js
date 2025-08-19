@@ -22,7 +22,7 @@ const purchaseSchema = new mongoose.Schema(
       enum: ["pending", "completed", "failed"],
       default: "pending",
     },
-    paymentId: { type: String }, // e.g., PayPal paymentId or transactionId
+    paymentId: { type: String }, 
   },
   { timestamps: true }
 );

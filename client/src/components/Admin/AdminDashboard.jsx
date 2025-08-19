@@ -5,6 +5,7 @@ import AddCourse from "./AddCourse";
 
 import Payment from "./Payment";
 import UserMessages from "./UserMessages";
+import AddWorkshop from "./AddWorkshop";
 
 const AdminDashboard = () => {
   const [active, setActive] = useState("Users");
@@ -18,6 +19,7 @@ const AdminDashboard = () => {
       >
         {active === "Users" && <Users />}
         {active === "Add Courses" && <AddCourse />}
+        {active === "Add Events" && <AddWorkshop />}
         {active === "Payments" && <Payment />}
         {active === "Contact Messages" && <UserMessages />}
 
