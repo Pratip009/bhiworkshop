@@ -31,7 +31,7 @@ const Courses = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0f172a]">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <SpinnerLoader size={35} />
       </div>
     );

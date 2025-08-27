@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.22.11",
     "@emailjs/browser": "^4.4.1",
+    "@headlessui/react": "^2.2.7",
     "@paypal/react-paypal-js": "^8.8.1",
     "@tailwindcss/vite": "^4.0.3",
     "aos": "^2.3.4",

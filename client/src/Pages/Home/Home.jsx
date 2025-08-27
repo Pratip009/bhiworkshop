@@ -3,6 +3,7 @@ import SpinnerLoader from "../../components/Loader";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+
 // Lazy loaded components
 const PopularCourses = lazy(() =>
   import("../../components/HomeComponents/PopularCourses")
@@ -10,8 +11,8 @@ const PopularCourses = lazy(() =>
 const FloatingButtons = lazy(() =>
   import("../../components/HomeComponents/FloatingButtons")
 );
-const InstructorCard = lazy(() =>
-  import("../../components/HomeComponents/InstructorCard")
+const OngoingWorkshops = lazy(() =>
+  import("../../components/HomeComponents/OngoingWorkshops")
 );
 // Animation Variants
 const containerVariants = {
@@ -125,7 +126,7 @@ const Home = () => {
           </div>
         }
       >
-        <InstructorCard />
+        <OngoingWorkshops />
         <PopularCourses />
         <FloatingButtons />
       </Suspense>
