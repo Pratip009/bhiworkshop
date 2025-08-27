@@ -112,7 +112,7 @@ const Contact = () => {
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
               <FaMapMarkerAlt className="text-[#F4D94A] text-2xl animate-bounce" />
               <span className="text-gray-800">
-                591 Summit Ave, Suite No. 400, Jersey City, NJ 07306
+                910 Bergen Ave, Floor 3, Jersey City, NJ 07045
               </span>
             </div>
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
