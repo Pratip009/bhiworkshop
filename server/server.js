@@ -22,7 +22,8 @@ const app = express();
 // ------------------- CORS SETUP -------------------
 const allowedOrigins = [
   "http://localhost:5173",       // Local dev
-  "https://bhiworkshops.com"     // Deployed frontend
+  "https://bhiworkshops.com",
+  "https://www.bhiworkshops.com"    // Deployed frontend
 ];
 
 app.use(cors({
