@@ -102,7 +102,7 @@ const Footer = () => {
               Contact Us
             </p>
             <div className="mt-4 text-[15px] text-gray-500 space-y-1">
-              <p>591 Summit Ave, Suite No. 400</p>
+              <p>910 Bergen Ave, Floor 3</p>
               <p>Jersey City, New Jersey, NJ 07306</p>
               <p className="mt-2 font-semibold text-[#F4D94A]">
                 📞 201-377-1594

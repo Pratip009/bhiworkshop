@@ -9,8 +9,8 @@ const OngoingWorkshops = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const flyers = [
-    { src: makeupFlyer, alt: "Makeup Workshop Flyer" },
-    { src: phoneFlyer, alt: "Phone Repair Workshop Flyer" },
+    { src: makeupFlyer, alt: "Makeup Workshop Flyer", time: "12PM - 4PM" },
+    { src: phoneFlyer, alt: "Phone Repair Workshop Flyer", time: "12PM - 6PM" },
   ];
 
   const handleDownload = (src, alt) => {
@@ -67,8 +67,14 @@ const OngoingWorkshops = () => {
             <img
               src={selectedImage.src}
               alt={selectedImage.alt}
-              className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-md"
+              className="max-h-[65vh] max-w-full object-contain rounded-lg shadow-md"
             />
+
+            {/* Workshop Info */}
+            <p className="mt-4 text-lg font-semibold text-gray-800">
+              🕒 Timing:{" "}
+              <span className="text-blue-600">{selectedImage.time}</span>
+            </p>
 
             {/* Action Section */}
             <div className="mt-6 text-center">
