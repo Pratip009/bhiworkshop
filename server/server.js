@@ -21,25 +21,30 @@ const app = express();
 
 // ------------------- CORS SETUP -------------------
 const allowedOrigins = [
-  "http://localhost:5173",       // Local dev
+  "http://localhost:5173", // Local dev
+  "http://localhost:3000", // React dev (optional)
   "https://bhiworkshops.com",
-  "https://www.bhiworkshops.com"    // Deployed frontend
+  "https://www.bhiworkshops.com",
+  "https://bhiworkshop-new.onrender.com", // Backend domain
 ];
 
-app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = "The CORS policy for this site does not allow access from the specified Origin.";
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true, // Allow cookies/auth headers
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like Postman, curl)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"), false);
+      }
+    },
+    credentials: true, // Allow cookies/auth headers
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 // ---------------------------------------------------
 
 app.use(express.json()); // Enable JSON parsing
