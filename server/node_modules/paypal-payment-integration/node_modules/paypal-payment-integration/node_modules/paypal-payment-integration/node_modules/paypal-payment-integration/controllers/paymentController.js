@@ -64,10 +64,9 @@ exports.initiatePayment = async (req, res) => {
 // Verify & Capture Payment
 // ----------------------------
 exports.verifyPayment = async (req, res) => {
-  const { userId, courseId, amount, paymentId, workshopDate, timeSlot } =
-    req.body;
+  const { userId, courseId, amount, paymentId: paypalOrderId, workshopDate, timeSlot } = req.body;
 
-  if (!userId || !courseId || !paymentId) {
+  if (!userId || !courseId || !paypalOrderId) {
     return res
       .status(400)
       .json({ message: "Missing payment verification details" });
@@ -76,7 +75,7 @@ exports.verifyPayment = async (req, res) => {
   try {
     // 1️⃣ Capture payment from PayPal
     const captureRes = await axios.post(
-      `${PAYPAL_API}/v2/checkout/orders/${paymentId}/capture`,
+      `${PAYPAL_API}/v2/checkout/orders/${paypalOrderId}/capture`,
       {},
       {
         auth: {
@@ -102,6 +101,7 @@ exports.verifyPayment = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    // 4️⃣ Check already purchased
     const alreadyEnrolled = user.purchasedCourses.find(
       (entry) => entry.course.toString() === courseId
     );
@@ -109,19 +109,16 @@ exports.verifyPayment = async (req, res) => {
       return res.status(400).json({ message: "Course already purchased" });
     }
 
-    // 4️⃣ Save to user's purchasedCourses
-    user.purchasedCourses.push({
-      course: courseId,
-      purchasedAt: new Date(),
-    });
+    // 5️⃣ Save to user's purchasedCourses
+    user.purchasedCourses.push({ course: courseId, purchasedAt: new Date() });
     await user.save();
 
-    // 5️⃣ Save to Purchase collection
+    // 6️⃣ Save to Purchase collection
     const purchase = await Purchase.create({
       user: userId,
       course: courseId,
       amount,
-      paymentId,
+      paymentId: paypalOrderId,
       status: "completed",
       workshopDate,
       timeSlot,

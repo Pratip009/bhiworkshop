@@ -14,7 +14,7 @@ const PaymentSuccess = () => {
     AOS.init({ duration: 1000 });
 
     const verifyPayment = async () => {
-      const userId = localStorage.getItem("userId");
+      const userId = sessionStorage.getItem("userId"); // ✅ fixed
       const token = localStorage.getItem("token");
       const courseId = sessionStorage.getItem("courseId");
       const amount = sessionStorage.getItem("courseAmount");
@@ -22,7 +22,7 @@ const PaymentSuccess = () => {
       const timeSlot = sessionStorage.getItem("timeSlot");
 
       const queryParams = new URLSearchParams(location.search);
-      const paymentId = queryParams.get("token"); // ✅ PayPal Order ID
+      const paypalOrderId = queryParams.get("token"); // ✅ PayPal order ID
 
       console.log("📦 Retrieved payment data:", {
         userId,
@@ -31,10 +31,10 @@ const PaymentSuccess = () => {
         amount,
         workshopDate,
         timeSlot,
-        paymentId,
+        paypalOrderId,
       });
 
-      if (!userId || !token || !courseId || !amount || !paymentId) {
+      if (!userId || !token || !courseId || !amount || !paypalOrderId) {
         setStatus("❌ Missing or invalid payment details.");
         setVerifying(false);
         return;
@@ -47,7 +47,7 @@ const PaymentSuccess = () => {
             userId,
             courseId,
             amount,
-            paymentId,
+            paymentId: paypalOrderId, // ✅ send correct orderId
             workshopDate,
             timeSlot,
           },
@@ -68,10 +68,7 @@ const PaymentSuccess = () => {
         setVerifying(false);
 
         // Cleanup session storage
-        sessionStorage.removeItem("courseId");
-        sessionStorage.removeItem("courseAmount");
-        sessionStorage.removeItem("workshopDate");
-        sessionStorage.removeItem("timeSlot");
+        sessionStorage.clear();
 
         // Clean query string in URL
         const cleanUrl = new URL(window.location);

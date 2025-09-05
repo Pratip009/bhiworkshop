@@ -54,7 +54,7 @@ const PaymentOptions = () => {
 
     setLoading(true);
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId"); // ✅ store user ID in localStorage on login
+    const userId = localStorage.getItem("userId"); // ✅ logged in user ID
 
     const payload = {
       amount: course.price,
@@ -63,17 +63,17 @@ const PaymentOptions = () => {
     };
 
     try {
-      const res = await axios.post(`${API_URL}/payment/initiate`, payload, {
+      const res = await axios.post(`${API_URL}/payment`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("✅ Backend response:", res.data);
 
-      // Save details for verification
+      // Save details for verification in sessionStorage
       sessionStorage.setItem("userId", userId);
       sessionStorage.setItem("courseId", course._id);
       sessionStorage.setItem("courseAmount", course.price);
-      sessionStorage.setItem("paymentId", res.data.paymentId);
+      sessionStorage.setItem("paypalOrderId", res.data.paymentId);
       sessionStorage.setItem("workshopDate", selectedDate.toISOString());
       sessionStorage.setItem("timeSlot", timeSlot);
 
@@ -83,7 +83,10 @@ const PaymentOptions = () => {
         throw new Error("No PayPal approval URL returned");
       }
     } catch (error) {
-      console.error("❌ Payment initiation failed:", error.response?.data || error.message);
+      console.error(
+        "❌ Payment initiation failed:",
+        error.response?.data || error.message
+      );
       alert("Payment initiation failed. Please try again.");
     } finally {
       setLoading(false);
@@ -148,20 +151,10 @@ const PaymentOptions = () => {
             disabled={loading}
             data-aos="fade-up"
           >
-            {loading ? "Processing..." : `Pay Now - $${course.price?.toFixed(2)}`}
+            {loading
+              ? "Processing..."
+              : `Pay Now - $${course.price?.toFixed(2)}`}
           </button>
-        </div>
-
-        {/* Info */}
-        <div className="mt-8 text-gray-300 text-sm space-y-2" data-aos="fade-up">
-          <p className="flex items-center justify-center gap-2">
-            <span className="text-green-400 text-lg">✔</span>
-            One-time payment, instant access.
-          </p>
-          <p className="flex items-center justify-center gap-2">
-            <span className="text-blue-400 text-lg">✔</span>
-            Secure checkout powered by PayPal.
-          </p>
         </div>
       </div>
     </div>
