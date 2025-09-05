@@ -102,7 +102,14 @@ app.post("/api/blogs", (req, res) => {
 // ------------------- PAYPAL PAYMENT ROUTES -------------------
 app.post("/payment", auth(["user", "admin"]), async (req, res) => {
   try {
-    const { amount } = req.body;
+    console.log("📥 Payment request received:", req.body);
+    const { amount, workshop_date, time_slot, courseId } = req.body;
+    console.log("📊 Parsed fields:", {
+      amount,
+      workshop_date,
+      time_slot,
+      courseId,
+    });
 
     if (!Number.isFinite(amount) || amount <= 0) {
       return res.status(400).json({ error: "Invalid payment amount" });
@@ -126,23 +133,26 @@ app.post("/payment", auth(["user", "admin"]), async (req, res) => {
       ],
     };
 
+    console.log("🛠️ Creating PayPal payment with:", create_payment_json);
+
     paypal.payment.create(create_payment_json, (error, payment) => {
       if (error) {
-        console.error("PayPal Error:", error);
+        console.error("❌ PayPal Error:", error.response || error);
         return res.status(500).json({ error: "Payment creation failed" });
       } else {
         const approvalUrl = payment.links.find(
           (link) => link.rel === "approval_url"
         );
+        console.log("✅ PayPal payment created:", payment);
         if (approvalUrl) {
-          res.json({ approval_url: approvalUrl.href });
+          res.json({ approval_url: approvalUrl.href, paymentId: payment.id });
         } else {
           res.status(500).json({ error: "No approval URL found" });
         }
       }
     });
   } catch (error) {
-    console.error("Server Error:", error);
+    console.error("🔥 Server Error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });

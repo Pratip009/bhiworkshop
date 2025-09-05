@@ -52,25 +52,26 @@ const PaymentOptions = () => {
       alert("Please select a Sunday date for your workshop.");
       return;
     }
+
     setLoading(true);
     const token = localStorage.getItem("token");
 
+    const payload = {
+      amount: course.price,
+      return_url: "http://localhost:5173/success",
+      workshop_date: selectedDate.toISOString(),
+      time_slot: timeSlot,
+      courseId: course._id,
+    };
+
+    console.log("📤 Sending payment request payload:", payload);
+
     try {
-      const res = await axios.post(
-        `${API_URL}/payment`,
-        {
-          amount: course.price,
-          return_url: "http://localhost:5173/success",
-          workshop_date: selectedDate.toISOString(),
-          time_slot: timeSlot,
-          courseId: course._id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.post(`${API_URL}/payment`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("✅ Backend response:", res.data);
 
       sessionStorage.setItem("courseId", course._id);
       sessionStorage.setItem("courseAmount", course.price);
@@ -79,6 +80,7 @@ const PaymentOptions = () => {
       sessionStorage.setItem("timeSlot", timeSlot);
 
       if (res.data.approval_url) {
+        console.log("➡️ Redirecting user to PayPal:", res.data.approval_url);
         window.location.href = res.data.approval_url;
       } else {
         throw new Error("No PayPal approval URL returned");
