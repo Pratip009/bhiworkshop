@@ -28,7 +28,7 @@ const OngoingWorkshops = () => {
         Ongoing Workshops
       </h1>
       <p className="text-gray-600 text-lg sm:text-xl mt-2 text-center">
-        🎟 Limited Seats Available – Enroll Now!
+        Limited Seats Available – Enroll Now!
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full px-4 mt-6">

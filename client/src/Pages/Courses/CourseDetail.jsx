@@ -117,7 +117,6 @@ const CourseDetail = () => {
   return (
     <div
       className="min-h-screen bg-[#f9fafb] text-black"
-
       style={{ fontFamily: "Play, sans-serif" }}
     >
       <main className="max-w-7xl mx-auto px-4 py-12">
@@ -131,10 +130,7 @@ const CourseDetail = () => {
             />
             <div className="grid grid-cols-2 gap-4 mt-6 text-sm text-gray-700">
               <DetailItem icon={<FaClock />} label={duration} />
-              <DetailItem
-                icon={<FaHourglassHalf />}
-                label={`${totalHours} Hours`}
-              />
+              <DetailItem icon={<FaHourglassHalf />} label={`${totalHours}`} />
               <DetailItem icon={<FaCalendarAlt />} label={calendarLength} />
               <DetailItem icon={<FaCalendarCheck />} label={classDays} />
               <DetailItem icon={<FaAward />} label={certification} />
@@ -149,9 +145,10 @@ const CourseDetail = () => {
             <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
               {title}
             </h1>
-            <p className="text-base sm:text-lg text-gray-600 mb-6">
-              {description}
-            </p>
+            <div
+              className="text-base sm:text-lg text-gray-600 mb-6"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
 
             {/* Price & Enroll Button */}
             <div className="flex items-center flex-wrap gap-6 mb-8">

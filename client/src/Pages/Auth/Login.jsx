@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import useAuth from "../../context/useAuth";
@@ -125,12 +125,12 @@ const Login = () => {
         {/* Register Link */}
         <p className="mt-6 text-center text-gray-400">
           Don&apos;t have an account?{" "}
-          <a
-            href="/register"
+          <Link
+            to="/register"
             className="text-blue-400 font-medium hover:underline"
           >
             Sign up
-          </a>
+          </Link>
         </p>
       </motion.div>
     </div>

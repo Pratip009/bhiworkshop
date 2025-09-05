@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css";
 import { FaEdit } from "react-icons/fa";
 
 const AddCourse = () => {
-  const API_URL = "http://localhost:8000";
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const defaultCourse = {
     title: "",

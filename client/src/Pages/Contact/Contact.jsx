@@ -112,7 +112,7 @@ const Contact = () => {
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
               <FaMapMarkerAlt className="text-[#F4D94A] text-2xl animate-bounce" />
               <span className="text-gray-800">
-                910 Bergen Ave, Floor 3, Jersey City, NJ 07045
+                910 Bergen Ave, Floor 3, Jersey City, NJ 07306
               </span>
             </div>
             <div className="flex items-center space-x-4 bg-gray-100 p-4 rounded-2xl shadow-md">
@@ -131,7 +131,7 @@ const Contact = () => {
               <iframe
                 title="map"
                 className="w-full h-84"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.2404959499418!2d-74.0622150245004!3d40.73473333622442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25730cc0c700d%3A0x5d67811a0fa442ef!2sBright%20Horizon%20Institute!5e0!3m2!1sen!2sin!4v1749047877573!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2736.0707341220714!2d-74.06743202450065!3d40.72997783651565!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c257327be123dd%3A0x3a074902a5df919b!2s910%20Bergen%20Ave%2C%20Jersey%20City%2C%20NJ%2007306%2C%20USA!5e1!3m2!1sen!2sin!4v1756332963726!5m2!1sen!2sin"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"

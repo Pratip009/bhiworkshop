@@ -63,8 +63,10 @@ exports.initiatePayment = async (req, res) => {
 };
 
 // ✅ Verify Payment & Enroll User
+// ...existing code...
 exports.verifyPayment = async (req, res) => {
-  const { userId, courseId, amount, paymentId } = req.body;
+  const { userId, courseId, amount, paymentId, workshopDate, timeSlot } =
+    req.body;
 
   if (!userId || !courseId || !amount || !paymentId) {
     return res
@@ -105,6 +107,8 @@ exports.verifyPayment = async (req, res) => {
       amount,
       paymentId,
       status: "completed",
+      workshopDate, // <-- Save date
+      timeSlot, // <-- Save time slot
     });
 
     console.log("✅ Purchase saved:", purchase);
@@ -115,6 +119,7 @@ exports.verifyPayment = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+// ...existing code...
 exports.getAllPayments = async (req, res) => {
   try {
     const payments = await Purchase.find()

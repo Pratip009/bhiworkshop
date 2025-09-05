@@ -1,6 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Play:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Play:wght@400;700&display=swap");
 
 @import "tailwindcss";
 body {
   font-family: "Play", sans-serif;
 }
+.react-datepicker-popper {
+  z-index: 999999 !important; /* force above everything */
+}
+.react-datepicker {
+  font-family: "Play", sans-serif;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+.react-datepicker__header {
+  background: linear-gradient(to right, #4f46e5, #9333ea);
+  color: white;
+}
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: linear-gradient(to right, #3b82f6, #8b5cf6);
+  color: white;
+  border-radius: 6px;
+}
+

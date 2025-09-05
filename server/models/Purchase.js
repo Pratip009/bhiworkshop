@@ -1,4 +1,3 @@
-// models/Purchase.js
 const mongoose = require("mongoose");
 
 const purchaseSchema = new mongoose.Schema(
@@ -22,10 +21,11 @@ const purchaseSchema = new mongoose.Schema(
       enum: ["pending", "completed", "failed"],
       default: "pending",
     },
-    paymentId: { type: String }, 
+    paymentId: { type: String },
+    workshopDate: { type: Date },      // <-- Add this
+    timeSlot: { type: String },        // <-- Add this
   },
   { timestamps: true }
 );
 
 module.exports = mongoose.model("Purchase", purchaseSchema);
- 
