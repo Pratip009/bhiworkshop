@@ -29,7 +29,6 @@ const PaymentOptions = () => {
     AOS.init({ duration: 1000, once: true });
   }, []);
 
-  // Only allow Sundays
   const filterSundays = (date) => date.getDay() === SUNDAY;
 
   if (!course) {
@@ -55,24 +54,23 @@ const PaymentOptions = () => {
 
     setLoading(true);
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId"); // ✅ store user ID in localStorage on login
 
     const payload = {
       amount: course.price,
       return_url: "http://localhost:5173/success",
-      workshop_date: selectedDate.toISOString(),
-      time_slot: timeSlot,
-      courseId: course._id,
+      cancel_url: "http://localhost:5173/cancel",
     };
 
-    console.log("📤 Sending payment request payload:", payload);
-
     try {
-      const res = await axios.post(`${API_URL}/payment`, payload, {
+      const res = await axios.post(`${API_URL}/payment/initiate`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("✅ Backend response:", res.data);
 
+      // Save details for verification
+      sessionStorage.setItem("userId", userId);
       sessionStorage.setItem("courseId", course._id);
       sessionStorage.setItem("courseAmount", course.price);
       sessionStorage.setItem("paymentId", res.data.paymentId);
@@ -80,16 +78,12 @@ const PaymentOptions = () => {
       sessionStorage.setItem("timeSlot", timeSlot);
 
       if (res.data.approval_url) {
-        console.log("➡️ Redirecting user to PayPal:", res.data.approval_url);
         window.location.href = res.data.approval_url;
       } else {
         throw new Error("No PayPal approval URL returned");
       }
     } catch (error) {
-      console.error(
-        "❌ Payment initiation failed:",
-        error.response?.data || error.message
-      );
+      console.error("❌ Payment initiation failed:", error.response?.data || error.message);
       alert("Payment initiation failed. Please try again.");
     } finally {
       setLoading(false);
@@ -105,7 +99,6 @@ const PaymentOptions = () => {
         className="bg-white/10 backdrop-blur-lg p-10 rounded-3xl shadow-2xl w-full max-w-2xl text-center border border-white/20"
         data-aos="zoom-in"
       >
-        {/* Title */}
         <h2
           className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 text-transparent bg-clip-text"
           data-aos="fade-down"
@@ -130,7 +123,7 @@ const PaymentOptions = () => {
             placeholderText="Click to select a Sunday"
             className="w-full border border-gray-400 px-4 py-3 rounded-xl text-white focus:ring-2 focus:ring-indigo-500"
             dateFormat="MMMM d, yyyy"
-            popperClassName="!z-[999999]" // 👈 Tailwind fix
+            popperClassName="!z-[999999]"
             portalId="root"
           />
         </div>
@@ -155,17 +148,12 @@ const PaymentOptions = () => {
             disabled={loading}
             data-aos="fade-up"
           >
-            {loading
-              ? "Processing..."
-              : `Pay Now - $${course.price?.toFixed(2)}`}
+            {loading ? "Processing..." : `Pay Now - $${course.price?.toFixed(2)}`}
           </button>
         </div>
 
         {/* Info */}
-        <div
-          className="mt-8 text-gray-300 text-sm space-y-2"
-          data-aos="fade-up"
-        >
+        <div className="mt-8 text-gray-300 text-sm space-y-2" data-aos="fade-up">
           <p className="flex items-center justify-center gap-2">
             <span className="text-green-400 text-lg">✔</span>
             One-time payment, instant access.

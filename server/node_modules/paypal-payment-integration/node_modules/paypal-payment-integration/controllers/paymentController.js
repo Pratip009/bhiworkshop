@@ -3,9 +3,11 @@ const Course = require("../models/Course");
 const Purchase = require("../models/Purchase");
 const axios = require("axios");
 
-const PAYPAL_API = "https://api-m.sandbox.paypal.com"; // change to live for production
+const PAYPAL_API = "https://api-m.sandbox.paypal.com"; // 🔁 change to live in production
 
-// ✅ Initiate PayPal Payment
+// ----------------------------
+// Initiate PayPal Payment
+// ----------------------------
 exports.initiatePayment = async (req, res) => {
   try {
     const { amount, return_url, cancel_url } = req.body;
@@ -54,17 +56,21 @@ exports.initiatePayment = async (req, res) => {
     res.status(200).json({ approval_url, paymentId });
   } catch (error) {
     console.error("❌ PayPal initiate error:", error.response?.data || error);
-    res.status(500).json({ message: "PayPal payment failed" });
+    res.status(500).json({ message: "PayPal payment initiation failed" });
   }
 };
 
-// ✅ Verify Payment & Enroll User
+// ----------------------------
+// Verify & Capture Payment
+// ----------------------------
 exports.verifyPayment = async (req, res) => {
   const { userId, courseId, amount, paymentId, workshopDate, timeSlot } =
     req.body;
 
   if (!userId || !courseId || !paymentId) {
-    return res.status(400).json({ message: "Missing payment verification details" });
+    return res
+      .status(400)
+      .json({ message: "Missing payment verification details" });
   }
 
   try {
@@ -133,12 +139,14 @@ exports.verifyPayment = async (req, res) => {
   }
 };
 
-// ✅ Admin: Get All Payments
+// ----------------------------
+// Admin: Get All Payments
+// ----------------------------
 exports.getAllPayments = async (req, res) => {
   try {
     const payments = await Purchase.find()
-      .populate("user", "username contact")
-      .populate("course", "title")
+      .populate("user", "username contact email")
+      .populate("course", "title price")
       .sort({ createdAt: -1 });
 
     res.status(200).json(payments);

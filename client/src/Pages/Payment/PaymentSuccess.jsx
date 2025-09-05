@@ -9,6 +9,7 @@ const PaymentSuccess = () => {
   const [status, setStatus] = useState("Verifying payment...");
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
   const location = useLocation();
+
   useEffect(() => {
     AOS.init({ duration: 1000 });
 
@@ -17,15 +18,21 @@ const PaymentSuccess = () => {
       const token = localStorage.getItem("token");
       const courseId = sessionStorage.getItem("courseId");
       const amount = sessionStorage.getItem("courseAmount");
-      const queryParams = new URLSearchParams(location.search);
-      const paymentId = queryParams.get("token"); // ✅ fixed
+      const workshopDate = sessionStorage.getItem("workshopDate");
+      const timeSlot = sessionStorage.getItem("timeSlot");
 
-      console.log("📦 Retrieved payment data:");
-      console.log("➡️ userId:", userId);
-      console.log("➡️ token:", token);
-      console.log("➡️ courseId:", courseId);
-      console.log("➡️ amount:", amount);
-      console.log("➡️ paymentId (from URL):", paymentId);
+      const queryParams = new URLSearchParams(location.search);
+      const paymentId = queryParams.get("token"); // ✅ PayPal Order ID
+
+      console.log("📦 Retrieved payment data:", {
+        userId,
+        token,
+        courseId,
+        amount,
+        workshopDate,
+        timeSlot,
+        paymentId,
+      });
 
       if (!userId || !token || !courseId || !amount || !paymentId) {
         setStatus("❌ Missing or invalid payment details.");
@@ -41,30 +48,32 @@ const PaymentSuccess = () => {
             courseId,
             amount,
             paymentId,
+            workshopDate,
+            timeSlot,
           },
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
         console.log("✅ Verification API response:", res.data);
-        setStatus("✅ Payment verified and course added!");
+        setStatus("✅ Payment verified and course enrolled!");
       } catch (error) {
         console.error(
           "❌ Verification failed:",
           error.response?.data || error.message
         );
-        setStatus(
-          "❌ Payment verified, but failed to update your course. Please contact support."
-        );
+        setStatus("❌ Payment verification failed. Please contact support.");
       } finally {
         setVerifying(false);
+
+        // Cleanup session storage
         sessionStorage.removeItem("courseId");
         sessionStorage.removeItem("courseAmount");
+        sessionStorage.removeItem("workshopDate");
+        sessionStorage.removeItem("timeSlot");
 
-        // Optional cleanup of query string
+        // Clean query string in URL
         const cleanUrl = new URL(window.location);
         cleanUrl.search = "";
         window.history.replaceState({}, document.title, cleanUrl.toString());
@@ -72,7 +81,7 @@ const PaymentSuccess = () => {
     };
 
     verifyPayment();
-  }, [location]);
+  }, [location, API_URL]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-300">
@@ -103,7 +112,6 @@ const PaymentSuccess = () => {
               to="/"
               className="inline-block px-6 py-3 bg-green-500 text-white font-semibold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"
               data-aos="fade-up"
-              style={{ textDecoration: "none" }}
             >
               Go to Home
             </Link>
