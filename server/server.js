@@ -42,17 +42,14 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-// ---------------------------------------------------
 
+// ---------------------------------------------------
 app.use(express.json());
 app.use(compression());
 
 // ------------------- MONGODB CONNECTION -------------------
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
     console.log(`📡 Connected to DB: ${process.env.MONGODB_URI}`);
@@ -66,18 +63,14 @@ mongoose.connection.on("error", (err) => {
 
 // ------------------- ROUTES -------------------
 app.use("/auth", authRoutes);
-
-// Protect users route with admin role
 app.use("/users", auth(["admin"]), userRoutes);
-
 app.use("/courses", courseRoutes);
 app.use("/blogs", blogRoutes);
 app.use("/gallery", galleryRoutes);
-app.use("/payment", paymentRoutes); // ✅ handled by paymentController.js
+app.use("/payment", paymentRoutes); 
 app.use("/contact", contactRoutes);
 app.use("/workshops", workshopRoutes);
 
-// Test blog post route (optional, keep or remove)
 app.post("/api/blogs", (req, res) => {
   console.log("Incoming request body:", req.body);
   res.status(200).json({ message: "Received" });
@@ -94,7 +87,7 @@ app.get("*", (req, res) => {
 // ---------------------------------------------------------
 
 // ------------------- START SERVER -------------------
-const PORT = process.env.REACT_APP_API_URL || 8000;
+const PORT = process.env.PORT || 8000; // ✅ use Render's PORT
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
 });
