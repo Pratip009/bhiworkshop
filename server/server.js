@@ -2,10 +2,8 @@ require("dotenv").config();
 const compression = require("compression");
 const path = require("path");
 const express = require("express");
-const paypal = require("paypal-rest-sdk");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -22,7 +20,7 @@ const app = express();
 // ------------------- CORS SETUP -------------------
 const allowedOrigins = [
   "http://localhost:5173", // Local dev
-  "http://localhost:3000", // React dev (optional)
+  "http://localhost:3000", // React dev
   "https://bhiworkshops.com",
   "https://www.bhiworkshops.com",
   "https://bhiworkshop-new.onrender.com", // Backend domain
@@ -31,26 +29,23 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like Postman, curl)
+      console.log("Incoming request origin:", origin);
       if (!origin) return callback(null, true);
-
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       } else {
         return callback(new Error("Not allowed by CORS"), false);
       }
     },
-    credentials: true, // Allow cookies/auth headers
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 // ---------------------------------------------------
 
-app.use(express.json()); // Enable JSON parsing
+app.use(express.json());
 app.use(compression());
-
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 // ------------------- MONGODB CONNECTION -------------------
 mongoose
@@ -59,10 +54,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("MongoDB Connected");
+    console.log("✅ MongoDB Connected");
     console.log(`📡 Connected to DB: ${process.env.MONGODB_URI}`);
   })
-  .catch((err) => console.error("MongoDB Connection Error:", err));
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB Error:", err);
@@ -72,123 +67,22 @@ mongoose.connection.on("error", (err) => {
 // ------------------- ROUTES -------------------
 app.use("/auth", authRoutes);
 
-app.use("/users", (req, res, next) => {
-  next();
-});
+// Protect users route with admin role
 app.use("/users", auth(["admin"]), userRoutes);
 
 app.use("/courses", courseRoutes);
 app.use("/blogs", blogRoutes);
 app.use("/gallery", galleryRoutes);
-app.use("/payment", paymentRoutes);
+app.use("/payment", paymentRoutes); // ✅ handled by paymentController.js
 app.use("/contact", contactRoutes);
 app.use("/workshops", workshopRoutes);
-// ---------------------------------------------------
 
-// ------------------- PAYPAL CONFIG -------------------
-paypal.configure({
-  mode: "sandbox", // Change to 'live' for production
-  client_id: process.env.PAYPAL_CLIENT_ID,
-  client_secret: process.env.PAYPAL_CLIENT_SECRET,
-});
-// ------------------------------------------------------
-
-// Test blog post route
+// Test blog post route (optional, keep or remove)
 app.post("/api/blogs", (req, res) => {
   console.log("Incoming request body:", req.body);
   res.status(200).json({ message: "Received" });
 });
-
-// ------------------- PAYPAL PAYMENT ROUTES -------------------
-app.post("/payment", auth(["user", "admin"]), async (req, res) => {
-  try {
-    console.log("📥 Payment request received:", req.body);
-    const { amount, workshop_date, time_slot, courseId } = req.body;
-    console.log("📊 Parsed fields:", {
-      amount,
-      workshop_date,
-      time_slot,
-      courseId,
-    });
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-      return res.status(400).json({ error: "Invalid payment amount" });
-    }
-
-    const create_payment_json = {
-      intent: "sale",
-      payer: { payment_method: "paypal" },
-      redirect_urls: {
-        return_url: `${BASE_URL}/success`,
-        cancel_url: `${BASE_URL}/failed`,
-      },
-      transactions: [
-        {
-          amount: {
-            currency: "USD",
-            total: amount.toFixed(2),
-          },
-          description: `Payment for course - $${amount}`,
-        },
-      ],
-    };
-
-    console.log("🛠️ Creating PayPal payment with:", create_payment_json);
-
-    paypal.payment.create(create_payment_json, (error, payment) => {
-      if (error) {
-        console.error("❌ PayPal Error:", error.response || error);
-        return res.status(500).json({ error: "Payment creation failed" });
-      } else {
-        const approvalUrl = payment.links.find(
-          (link) => link.rel === "approval_url"
-        );
-        console.log("✅ PayPal payment created:", payment);
-        if (approvalUrl) {
-          res.json({ approval_url: approvalUrl.href, paymentId: payment.id });
-        } else {
-          res.status(500).json({ error: "No approval URL found" });
-        }
-      }
-    });
-  } catch (error) {
-    console.error("🔥 Server Error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-app.get("/success", async (req, res) => {
-  try {
-    const payerId = req.query.PayerID;
-    const paymentId = req.query.paymentId;
-
-    if (!payerId || !paymentId) {
-      return res.redirect(`${BASE_URL}/failed`);
-    }
-
-    paypal.payment.execute(
-      paymentId,
-      { payer_id: payerId },
-      (error, payment) => {
-        if (error) {
-          console.error("Execution Error:", error);
-          return res.redirect(`${BASE_URL}/failed`);
-        } else {
-          console.log("Payment Successful:", payment);
-          return res.redirect(`${BASE_URL}/success`);
-        }
-      }
-    );
-  } catch (error) {
-    console.error("Error:", error);
-    res.redirect(`${BASE_URL}/failed`);
-  }
-});
-
-app.get("/failed", (req, res) => {
-  return res.redirect(`${BASE_URL}/failed`);
-});
-// ------------------------------------------------------------
+// ---------------------------------------------------
 
 // ------------------- SERVE FRONTEND -------------------
 app.use(express.static(path.join(__dirname, "..", "client", "dist")));
@@ -202,6 +96,6 @@ app.get("*", (req, res) => {
 // ------------------- START SERVER -------------------
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
 // ---------------------------------------------------

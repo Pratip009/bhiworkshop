@@ -115,7 +115,7 @@ const PaymentOptions = () => {
 
         {/* Date Picker */}
         <div className="mb-6 text-left" data-aos="fade-up">
-          <label className="block mb-2 text-gray-200 font-semibold">
+          <label className="block mb-2 text-gray-200 font-semibold mr-2">
             Select a Sunday for your workshop:
           </label>
           <DatePicker
