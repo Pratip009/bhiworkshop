@@ -36,7 +36,7 @@ exports.initiatePayment = async (req, res) => {
       {
         auth: {
           username: process.env.PAYPAL_CLIENT_ID,
-          password: process.env.PAYPAL_SECRET,
+          password: process.env.PAYPAL_CLIENT_SECRET,
         },
       }
     );
@@ -64,7 +64,14 @@ exports.initiatePayment = async (req, res) => {
 // Verify & Capture Payment
 // ----------------------------
 exports.verifyPayment = async (req, res) => {
-  const { userId, courseId, amount, paymentId: paypalOrderId, workshopDate, timeSlot } = req.body;
+  const {
+    userId,
+    courseId,
+    amount,
+    paymentId: paypalOrderId,
+    workshopDate,
+    timeSlot,
+  } = req.body;
 
   if (!userId || !courseId || !paypalOrderId) {
     return res
@@ -80,7 +87,7 @@ exports.verifyPayment = async (req, res) => {
       {
         auth: {
           username: process.env.PAYPAL_CLIENT_ID,
-          password: process.env.PAYPAL_SECRET,
+          password: process.env.PAYPAL_CLIENT_SECRET,
         },
       }
     );
@@ -110,7 +117,10 @@ exports.verifyPayment = async (req, res) => {
     }
 
     // 5️⃣ Save to user's purchasedCourses
-    user.purchasedCourses.push({ course: courseId, purchasedAt: new Date() });
+    if (parseFloat(course.price) !== parseFloat(amount)) {
+      return res.status(400).json({ message: "Invalid course or amount" });
+    }
+
     await user.save();
 
     // 6️⃣ Save to Purchase collection
