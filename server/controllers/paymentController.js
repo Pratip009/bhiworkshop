@@ -11,8 +11,10 @@ const PAYPAL_API = "https://api-m.sandbox.paypal.com"; // 🔁 change to live in
 exports.initiatePayment = async (req, res) => {
   try {
     const { amount, return_url, cancel_url } = req.body;
+    console.log("💻 Backend received payment request:", req.body);
 
     if (!amount || !return_url) {
+      console.warn("⚠️ Missing amount or return_url");
       return res.status(400).json({ message: "Missing amount or return URL" });
     }
 
@@ -21,12 +23,7 @@ exports.initiatePayment = async (req, res) => {
       {
         intent: "CAPTURE",
         purchase_units: [
-          {
-            amount: {
-              currency_code: "USD",
-              value: amount.toString(),
-            },
-          },
+          { amount: { currency_code: "USD", value: amount.toString() } },
         ],
         application_context: {
           return_url,
@@ -41,21 +38,26 @@ exports.initiatePayment = async (req, res) => {
       }
     );
 
+    console.log("✅ PayPal response data:", response.data);
+
     const approval_url = response.data.links.find(
       (link) => link.rel === "approve"
     )?.href;
-
     const paymentId = response.data.id;
 
-    console.log("✅ PayPal Payment Created:", paymentId, approval_url);
+    console.log("🔗 Approval URL:", approval_url, "Payment ID:", paymentId);
 
     if (!approval_url || !paymentId) {
+      console.error("❌ Failed to get approval_url or paymentId from PayPal");
       return res.status(500).json({ message: "Failed to create PayPal order" });
     }
 
     res.status(200).json({ approval_url, paymentId });
   } catch (error) {
-    console.error("❌ PayPal initiate error:", error.response?.data || error);
+    console.error(
+      "❌ PayPal initiate error:",
+      error.response?.data || error.message || error
+    );
     res.status(500).json({ message: "PayPal payment initiation failed" });
   }
 };
@@ -108,7 +110,7 @@ exports.verifyPayment = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // 4️⃣ Check already purchased
+    // 4️⃣ Check if already purchased
     const alreadyEnrolled = user.purchasedCourses.find(
       (entry) => entry.course.toString() === courseId
     );
@@ -117,11 +119,13 @@ exports.verifyPayment = async (req, res) => {
     }
 
     // 5️⃣ Save to user's purchasedCourses
-    if (parseFloat(course.price) !== parseFloat(amount)) {
-      return res.status(400).json({ message: "Invalid course or amount" });
-    }
+    user.purchasedCourses.push({
+      course: course._id,
+      purchasedAt: new Date(),
+    });
 
     await user.save();
+    console.log("✅ Updated user purchasedCourses:", user.purchasedCourses);
 
     // 6️⃣ Save to Purchase collection
     const purchase = await Purchase.create({

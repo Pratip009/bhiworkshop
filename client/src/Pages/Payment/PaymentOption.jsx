@@ -27,11 +27,13 @@ const PaymentOptions = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     AOS.init({ duration: 1000, once: true });
-  }, []);
+    console.log("📌 PaymentOptions mounted. Course:", course);
+  }, [course]);
 
   const filterSundays = (date) => date.getDay() === SUNDAY;
 
   if (!course) {
+    console.warn("⚠️ No course found in location.state");
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
         <div
@@ -47,29 +49,38 @@ const PaymentOptions = () => {
   }
 
   const handlePayment = async () => {
+    console.log("💳 Initiating payment for course:", course.title);
+
     if (!selectedDate) {
       alert("Please select a Sunday date for your workshop.");
+      console.warn("⚠️ No date selected");
       return;
     }
 
     setLoading(true);
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId"); // ✅ logged in user ID
+    const userId = localStorage.getItem("userId");
+
+    console.log("🔑 User info:", { userId, token });
+    console.log("🗓 Selected workshop date:", selectedDate);
+    console.log("⏰ Time slot:", timeSlot);
 
     const payload = {
       amount: course.price,
-      return_url: "http://localhost:5173/success",
-      cancel_url: "http://localhost:5173/cancel",
+      return_url: "http://localhost:5173/#/success",
+      cancel_url: "http://localhost:5173/#/cancel",
     };
 
     try {
+      console.log("📡 Sending payment request to backend:", payload);
       const res = await axios.post(`${API_URL}/payment`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("✅ Backend response:", res.data);
 
-      // Save details for verification in sessionStorage
+      // Save details for verification
+      console.log("💾 Saving payment info in sessionStorage");
       sessionStorage.setItem("userId", userId);
       sessionStorage.setItem("courseId", course._id);
       sessionStorage.setItem("courseAmount", course.price);
@@ -77,9 +88,12 @@ const PaymentOptions = () => {
       sessionStorage.setItem("workshopDate", selectedDate.toISOString());
       sessionStorage.setItem("timeSlot", timeSlot);
 
-      if (res.data.approval_url) {
-        window.location.href = res.data.approval_url;
+      const approvalUrl = res.data.approval_url;
+      if (approvalUrl) {
+        console.log("➡️ Redirecting to PayPal approval URL:", approvalUrl);
+        window.location.href = approvalUrl;
       } else {
+        console.error("❌ No approval URL returned from backend");
         throw new Error("No PayPal approval URL returned");
       }
     } catch (error) {
@@ -87,9 +101,10 @@ const PaymentOptions = () => {
         "❌ Payment initiation failed:",
         error.response?.data || error.message
       );
-      alert("Payment initiation failed. Please try again.");
+      alert("Payment initiation failed. Please check the console logs.");
     } finally {
       setLoading(false);
+      console.log("⏹ Payment process ended (loading false)");
     }
   };
 
@@ -113,14 +128,16 @@ const PaymentOptions = () => {
           Pay securely to reserve your spot and unlock everything instantly.
         </p>
 
-        {/* Date Picker */}
         <div className="mb-6 text-left" data-aos="fade-up">
           <label className="block mb-2 text-gray-200 font-semibold mr-2">
             Select a Sunday for your workshop:
           </label>
           <DatePicker
             selected={selectedDate}
-            onChange={setSelectedDate}
+            onChange={(date) => {
+              console.log("📅 Date selected:", date);
+              setSelectedDate(date);
+            }}
             filterDate={filterSundays}
             minDate={new Date()}
             placeholderText="Click to select a Sunday"
@@ -131,7 +148,6 @@ const PaymentOptions = () => {
           />
         </div>
 
-        {/* Time Slot */}
         {timeSlot && (
           <div className="mb-8" data-aos="fade-up">
             <label className="block mb-2 text-gray-200 font-semibold">
@@ -143,7 +159,6 @@ const PaymentOptions = () => {
           </div>
         )}
 
-        {/* Payment Button */}
         <div className="mt-8">
           <button
             onClick={handlePayment}
