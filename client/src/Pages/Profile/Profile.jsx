@@ -108,12 +108,17 @@ const Profile = () => {
                   {course.description ? (
                     <p
                       className="text-gray-600 text-sm mb-3 leading-relaxed"
-                      title={course.description}
-                    >
-                      {course.description.length > 100
-                        ? course.description.slice(0, 100) + "..."
-                        : course.description}
-                    </p>
+                      title={course.description.replace(/<[^>]+>/g, "")} // tooltip
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          course.description.replace(/<[^>]+>/g, "").length >
+                          100
+                            ? course.description
+                                .replace(/<[^>]+>/g, "")
+                                .slice(0, 100) + "..."
+                            : course.description.replace(/<[^>]+>/g, ""),
+                      }}
+                    />
                   ) : (
                     <p className="text-gray-500 text-sm italic mb-3">
                       No description available.

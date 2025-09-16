@@ -1,29 +1,23 @@
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import { FaClock } from "react-icons/fa";
 import { SlCalender } from "react-icons/sl";
-import AuthContext from "../../context/AuthContext";
 
 // Modern, vibrant palette and card style
-const CARD_BG = "#ffffff"; // clean white background
-const ACCENT = "#F4D94A"; // your brand's primary accent
+const CARD_BG = "#ffffff"; 
+const ACCENT = "#F4D94A"; 
 const ACCENT_DARK = "#249eb5";
-const BADGE_BG = "#FF6B57"; // solid modern badge
-const TITLE_COLOR = "#1F2937"; // dark gray/blue for better readability
-const DESC_COLOR = "#6B7280"; // soft gray for descriptions
+const BADGE_BG = "#FF6B57"; 
+const TITLE_COLOR = "#1F2937"; 
+const DESC_COLOR = "#6B7280"; 
 const SEAT_COLOR = "#ffffff";
 
 const CourseCard = ({ courses }) => {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
 
   const handleViewProgramClick = (courseId) => {
-    if (user) {
-      navigate(`/courses/${courseId}`);
-    } else {
-      navigate("/login");
-    }
+    // Remove login check: anyone can view course details
+    navigate(`/courses/${courseId}`);
   };
 
   const truncateText = (htmlString, wordLimit = 13) => {
@@ -111,15 +105,11 @@ const CourseCard = ({ courses }) => {
             <div className="flex justify-between text-xs mb-5 px-1">
               <span>
                 <strong style={{ color: ACCENT }}>Start:</strong>{" "}
-                <span style={{ color: TITLE_COLOR }}>
-                  {course.startDate || "N/A"}
-                </span>
+                <span style={{ color: TITLE_COLOR }}>{course.startDate || "N/A"}</span>
               </span>
               <span>
                 <strong style={{ color: ACCENT }}>End:</strong>{" "}
-                <span style={{ color: TITLE_COLOR }}>
-                  {course.endDate || "N/A"}
-                </span>
+                <span style={{ color: TITLE_COLOR }}>{course.endDate || "N/A"}</span>
               </span>
             </div>
 
@@ -134,9 +124,7 @@ const CourseCard = ({ courses }) => {
                 border: "none",
                 fontFamily: "Kanit, sans-serif",
               }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.background = ACCENT_DARK)
-              }
+              onMouseOver={(e) => (e.currentTarget.style.background = ACCENT_DARK)}
               onMouseOut={(e) => (e.currentTarget.style.background = ACCENT)}
             >
               View Program

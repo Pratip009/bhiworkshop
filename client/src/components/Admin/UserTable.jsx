@@ -37,6 +37,10 @@ const UserTable = ({ users, handleDelete }) => {
                       const purchaseTime = entry.purchasedAt
                         ? new Date(entry.purchasedAt).toLocaleString()
                         : "Unknown time";
+                      const workshopDate = entry.workshopDate
+                        ? new Date(entry.workshopDate).toLocaleDateString()
+                        : "N/A";
+                      const timeSlot = entry.timeSlot || "N/A";
 
                       return (
                         <li key={index}>
@@ -46,6 +50,10 @@ const UserTable = ({ users, handleDelete }) => {
                           <br />
                           <span className="text-xs text-gray-500">
                             Enrolled at: {purchaseTime}
+                            <br />
+                            Workshop Date: {workshopDate}
+                            <br />
+                            Time Slot: {timeSlot}
                           </span>
                         </li>
                       );
@@ -67,7 +75,7 @@ const UserTable = ({ users, handleDelete }) => {
           ))
         ) : (
           <tr>
-            <td colSpan="6" className="text-center p-4">
+            <td colSpan="7" className="text-center p-4">
               No users found
             </td>
           </tr>

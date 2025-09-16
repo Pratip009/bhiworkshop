@@ -9,7 +9,7 @@ router.get("/:id", auth(), getUserById);
 router.get("/", auth(["admin"]), getUsers);
 router.delete("/:id", auth(["admin"]), deleteUser);
 
-
-// <-- Allow user to fetch their own profile
+// ✅ New route: fetch all users with purchase/workshop info
+router.get("/with-purchases/all", auth(["admin"]), getUsers);
 
 module.exports = router;

@@ -1,4 +1,3 @@
-// CourseDetail.jsx
 /* eslint-disable react/prop-types */
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
@@ -14,15 +13,24 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 
+// Helper: split learning outcomes into two halves
 const splitLearningOutcomes = (arr) => {
   const mid = Math.ceil(arr.length / 2);
   return [arr.slice(0, mid), arr.slice(mid)];
+};
+
+// Helper: strip HTML tags
+const stripHTML = (html) => {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
 };
 
 const CourseDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+
   const [course, setCourse] = useState(null);
   const [userCourses, setUserCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +42,8 @@ const CourseDetail = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
+
+        // Fetch all courses
         const courseRes = await fetch(`${API_URL}/courses`);
         const courses = await courseRes.json();
         const found = courses.find((c) => c._id === id);
@@ -43,6 +53,7 @@ const CourseDetail = () => {
         }
         setCourse(found);
 
+        // If logged in, fetch user purchased courses
         const token = localStorage.getItem("token");
         const userId = localStorage.getItem("userId");
         if (user && token && userId) {
@@ -115,10 +126,7 @@ const CourseDetail = () => {
   ];
 
   return (
-    <div
-      className="min-h-screen bg-[#f9fafb] text-black"
-      style={{ fontFamily: "Play, sans-serif" }}
-    >
+    <div className="min-h-screen bg-[#f9fafb] text-black" style={{ fontFamily: "Play, sans-serif" }}>
       <main className="max-w-7xl mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           {/* LEFT PANEL */}
@@ -134,36 +142,28 @@ const CourseDetail = () => {
               <DetailItem icon={<FaCalendarAlt />} label={calendarLength} />
               <DetailItem icon={<FaCalendarCheck />} label={classDays} />
               <DetailItem icon={<FaAward />} label={certification} />
-              {kitsIncluded && (
-                <DetailItem icon={<FaBox />} label="Kits Included" />
-              )}
+              {kitsIncluded && <DetailItem icon={<FaBox />} label="Kits Included" />}
             </div>
           </div>
 
           {/* RIGHT PANEL */}
           <div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
-              {title}
-            </h1>
-            <div
-              className="text-base sm:text-lg text-gray-600 mb-6"
-              dangerouslySetInnerHTML={{ __html: description }}
-            />
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">{title}</h1>
+            <p className="text-base sm:text-lg text-gray-600 mb-6">
+              {/* Show full description without slicing */}
+              {description ? stripHTML(description) : "No description available."}
+            </p>
 
             {/* Price & Enroll Button */}
             <div className="flex items-center flex-wrap gap-6 mb-8">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-3xl font-bold text-gray-900">
-                    ${price}
-                  </span>
+                  <span className="text-3xl font-bold text-gray-900">${price}</span>
                   <span className="line-through text-gray-500 text-lg">
                     ${(price * 1.2).toFixed(0)}
                   </span>
                 </div>
-                <p className="text-xs text-green-600 font-semibold mt-1">
-                  20% off this week!
-                </p>
+                <p className="text-xs text-green-600 font-semibold mt-1">20% off this week!</p>
               </div>
 
               {!isEnrolled ? (
@@ -179,13 +179,8 @@ const CourseDetail = () => {
                 </span>
               )}
             </div>
-            <div className="bg-yellow-100 border-l-4 border-yellow-400 text-yellow-800 text-sm sm:text-base font-medium px-4 py-3 rounded-md shadow-sm mb-8">
-              🎯 <strong>Get individual attention:</strong> Our dedicated coach
-              ensures individual attention for every participant.{" "}
-              <strong>Reserve your spot now</strong> and enjoy personalized
-              guidance.
-            </div>
-            {/* Date & Seat Info */}
+
+            {/* Info */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center bg-indigo-50 border border-indigo-300 rounded-lg p-4 mb-10">
               <InfoBox label="Start Date" value={startDate || "N/A"} />
               <InfoBox label="End Date" value={endDate || "N/A"} />
@@ -194,11 +189,9 @@ const CourseDetail = () => {
           </div>
         </div>
 
-        {/* What You’ll Learn Section */}
+        {/* Learning Outcomes */}
         <div className="mt-14">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            What you&apos;ll learn
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">What you&apos;ll learn</h2>
           <ul className="space-y-3 bg-indigo-50 border border-indigo-200 p-6 rounded-lg">
             {allOutcomes.map((item, idx) => (
               <li key={idx} className="flex items-start gap-2 text-gray-800">
@@ -215,30 +208,24 @@ const CourseDetail = () => {
         <div className="md:hidden fixed bottom-0 w-full left-0 bg-gray-100 border-t border-gray-300 shadow-lg z-30 flex justify-between items-center px-4 py-3">
           <div>
             <span className="font-bold text-gray-800 text-lg">${price}</span>
-            <span className="text-xs text-green-500 ml-2 font-semibold">
-              20% off
-            </span>
+            <span className="text-xs text-green-500 ml-2 font-semibold">20% off</span>
           </div>
           <button
             onClick={handleEnroll}
             className="bg-[#57B4BA] hover:bg-[#45a3a0] text-white font-bold py-2 px-5 rounded-lg text-sm transition"
           >
-            {user ? "Enroll" : "Sign in"}
+            {user ? "Enroll" : "Sign in to Enroll"}
           </button>
         </div>
       )}
 
       {/* Footer */}
-      <footer className="w-full py-8 px-4 mt-14 bg-gray-100 text-gray-600 text-center border-t">
-        <span className="font-semibold">
-          © {new Date().getFullYear()} Your Academy. All rights reserved.
-        </span>
-      </footer>
+     
     </div>
   );
 };
 
-// Helper Component for icon-label pairs
+// Helper: icon-label pair
 const DetailItem = ({ icon, label }) => (
   <div className="flex items-center gap-2 text-sm">
     <span className="text-[#57B4BA]">{icon}</span>
@@ -246,7 +233,7 @@ const DetailItem = ({ icon, label }) => (
   </div>
 );
 
-// Box for Start Date / End Date / Seats
+// Helper: info box
 const InfoBox = ({ label, value }) => (
   <div>
     <p className="text-sm text-gray-600">{label}</p>
