@@ -1,14 +1,59 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const nodemailer = require("nodemailer");
+const fs = require("fs");
+const path = require("path");
 
-exports.register = async (req, res) => {
-  const { username, email, password,contact, role } = req.body;
-  const user = new User({ username, email, password, contact, role });
-  await user.save();
-  res.status(201).send("User registered");
+// Create reusable transporter object using SMTP
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || "smtp.gmail.com",
+  port: process.env.SMTP_PORT || 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER, // your email
+    pass: process.env.SMTP_PASS, // your generated app password
+  },
+});
+
+// Load HTML template
+const loadEmailTemplate = (username) => {
+  const templatePath = path.join(__dirname, "../emails/register.html");
+  let template = fs.readFileSync(templatePath, "utf-8");
+  template = template.replace(/{{username}}/g, username);
+  template = template.replace(/{{year}}/g, new Date().getFullYear());
+  return template;
 };
 
+// Register user
+exports.register = async (req, res) => {
+  try {
+    const { username, email, password, contact, role } = req.body;
+
+    // Check if email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    const user = new User({ username, email, password, contact, role });
+    await user.save();
+
+    // Send welcome email
+    const htmlContent = loadEmailTemplate(username);
+    await transporter.sendMail({
+      from: `"BHI Workshop" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: "Welcome to BHI Workshop!",
+      html: htmlContent,
+    });
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });

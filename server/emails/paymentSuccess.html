@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Payment Successful</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background: #f4f7fb;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    }
+    .header {
+      background: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .content {
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .content h2 {
+      color: #007bff;
+    }
+    .details {
+      margin-top: 15px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-left: 4px solid #007bff;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      padding: 15px;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Payment Successful 🎉</h1>
+    </div>
+    <div class="content">
+      <h2>Hello {{username}},</h2>
+      <p>Thank you for enrolling in <strong>{{courseTitle}}</strong>.</p>
+      <div class="details">
+        <p><strong>Course:</strong> {{courseTitle}}</p>
+        <p><strong>Amount Paid:</strong> ${{amount}}</p>
+        <p><strong>Workshop Date:</strong> {{workshopDate}}</p>
+        <p><strong>Time Slot:</strong> {{timeSlot}}</p>
+      </div>
+      <p>We look forward to seeing you in the workshop 🚀</p>
+      <p>Cheers,<br/>The Your Academy Team</p>
+    </div>
+    <div class="footer">
+      &copy; {{year}} Your Academy. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>

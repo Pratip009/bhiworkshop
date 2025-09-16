@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Download, X } from "lucide-react";
 
-import makeupFlyer from "../../assets/images/makeup.png";
-import phoneFlyer from "../../assets/images/phonerepair.png";
+import makeupFlyer from "../../assets/images/mu.png";
+import phoneFlyer from "../../assets/images/ph.png";
 
 const OngoingWorkshops = () => {
   const [selectedImage, setSelectedImage] = useState(null);
