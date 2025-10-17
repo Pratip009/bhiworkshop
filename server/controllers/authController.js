@@ -26,11 +26,11 @@ const loadEmailTemplate = (username) => {
 };
 
 // Register user
+// ✅ Fixed register controller
 exports.register = async (req, res) => {
   try {
     const { username, email, password, contact, role } = req.body;
 
-    // Check if email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered" });
@@ -39,21 +39,34 @@ exports.register = async (req, res) => {
     const user = new User({ username, email, password, contact, role });
     await user.save();
 
-    // Send welcome email
+    // ✅ Send response first
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully ✅",
+      user: {
+        _id: user._id,
+        email: user.email,
+        username: user.username,
+        contact: user.contact,
+        role: user.role,
+      },
+    });
+
+    // 👇 Send email asynchronously (won’t block response)
     const htmlContent = loadEmailTemplate(username);
-    await transporter.sendMail({
+    transporter.sendMail({
       from: `"BHI Workshop" <${process.env.SMTP_USER}>`,
       to: email,
       subject: "Welcome to BHI Workshop!",
       html: htmlContent,
-    });
+    }).catch((err) => console.error("❌ Email failed:", err.message));
 
-    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error("Error registering user:", error);
+    console.error("❌ Error registering user:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });

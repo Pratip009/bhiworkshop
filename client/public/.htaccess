@@ -1,0 +1,3 @@
+# .htaccess in public_html
+RewriteEngine On
+RewriteRule ^workshops$ /workshops.html [L]

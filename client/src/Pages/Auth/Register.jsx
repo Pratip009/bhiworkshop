@@ -15,25 +15,61 @@ const Register = () => {
   const navigate = useNavigate(); // ✅ initialize navigate
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(`${API_URL}/auth/register`, {
+  e.preventDefault();
+
+  // 👇 Log data before sending (for debugging)
+  console.log("Register form data being sent:", {
+    email,
+    username,
+    password,
+    contact,
+    role: "user",
+    api_url: `${API_URL}/auth/register`,
+  });
+
+  try {
+    const res = await axios.post(
+      `${API_URL}/auth/register`,
+      {
         email,
         username,
         password,
         contact,
         role: "user",
-      });
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json", // ensure backend response is parsed
+        },
+      }
+    );
 
-      alert("User registered successfully ✅");
+    // 👇 Log backend response
+    console.log("✅ Registration response:", res.data);
 
-      // ✅ redirect to login page
+    // ✅ Handle success message properly
+    if (res.data?.success || res.status === 201) {
+      alert(res.data?.message || "User registered successfully ✅");
       navigate("/login");
-    } catch (err) {
-      console.error(err);
-      alert("Registration failed ❌. Try again.");
+    } else {
+      alert(res.data?.message || "Something went wrong ❌");
     }
-  };
+
+  } catch (err) {
+    // 👇 Improved error logging
+    console.error("❌ Registration error details:", err.response?.data || err.message);
+
+    // ✅ More user-friendly feedback
+    const backendMsg = err.response?.data?.message;
+    if (backendMsg === "Email already registered") {
+      alert("This email is already registered. Please log in instead.");
+    } else {
+      alert("Registration failed ❌. Please try again later.");
+    }
+  }
+};
+
 
   return (
     <div className="flex h-screen">

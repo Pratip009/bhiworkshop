@@ -5,40 +5,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Basic Metadata -->
   <title>BHI Workshop – Transform Your Career | Bright Horizon Institute</title>
   <meta name="description"
     content="Transform your career with BHI Workshops by Bright Horizon Institute. Learn, Build, Achieve with hands-on training, real-world projects, expert mentors, and certified outcomes in areas like sewing, makeup, repair, calligraphy, and more." />
-
-  <meta name="keywords" content="
-BHI workshop, career workshops, hands-on learning, sewing classes Jersey City, makeup workshop, iPhone Samsung repair course, calligraphy classes, career transformation, real-world projects, live mentor guidance, learn at your own pace, certified workshops, Jersey City technical workshops, career-ready skills, job-ready training
-">
-
+  <meta name="keywords"
+    content="BHI workshop, career workshops, hands-on learning, sewing classes Jersey City, makeup workshop, iPhone Samsung repair course, calligraphy classes, career transformation, real-world projects, live mentor guidance, learn at your own pace, certified workshops, Jersey City technical workshops, career-ready skills, job-ready training" />
   <meta name="author" content="Bright Horizon Institute" />
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="BHI Workshop – Transform Your Career" />
+  <meta property="og:title" content="BHI Workshop – Transform Your Career">
   <meta property="og:description"
-    content="Hands-on workshops with top mentors at Bright Horizon Institute. Build real-world projects, earn verifiable certifications, and gain career-ready skills." />
-  <meta property="og:image" content="/og-image.jpg" />
-  <meta property="og:url" content="https://yourdomain.com/workshops" />
-  <meta property="og:type" content="website" />
+    content="Hands-on workshops with top mentors at Bright Horizon Institute. Build real-world projects, earn verifiable certifications, and gain career-ready skills.">
+  <meta property="og:image" content="https://bhiworkshops.com/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://bhiworkshops.com/workshops.html">
+  <meta property="og:type" content="website">
 
   <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="BHI Workshop – Transform Your Career" />
   <meta name="twitter:description"
     content="Learn. Build. Achieve. Hands-on BHI Workshops with live mentors, project-based learning, and certified outcomes at Bright Horizon Institute." />
-  <meta name="twitter:image" content="/og-image.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://bhiworkshops.com/og-image.jpg" />
+  <meta name="twitter:url" content="https://bhiworkshops.com/workshops" />
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = '2.0';
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '1599916211265848');
+    fbq('track', 'PageView');
+  </script>
 </head>
 
 <body class="font-play">
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1599916211265848&ev=PageView&noscript=1" />
+  </noscript>
+
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
-  
 </body>
 
 </html>
